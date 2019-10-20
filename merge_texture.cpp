@@ -1,5 +1,22 @@
 #include "merge_texture.h"
 
+void MergeTexture::merge() {
+	const int RECTS = 200;
+	const bool ALLOW_FLIP = false;
+
+	Vector<rect_xywhf *> e;
+
+	//note: add a pointer pointer to the entry into rect_xywhf istead.
+
+	for (int i = 0; i < _entries.size(); ++i) {
+		e.push_back(&(_entries.get(i).rect));
+	}
+
+	if (pack(e.ptr(), RECTS, 400, ALLOW_FLIP, _bins)) {
+		print_error("ok");
+	}
+}
+
 String MergeTexture::test() {
 	String res = "";
 
@@ -38,6 +55,7 @@ MergeTexture::MergeTexture() {
 }
 
 MergeTexture::~MergeTexture() {
+	_entries.clear();
 }
 
 void MergeTexture::_bind_methods() {
