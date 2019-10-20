@@ -10,7 +10,7 @@ class MergeTexture : public ImageTexture {
 	GDCLASS(MergeTexture, ImageTexture);
 
 public:
-	void test();
+	String test();
 
 	MergeTexture();
 	~MergeTexture();
