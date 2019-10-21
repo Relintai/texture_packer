@@ -68,57 +68,75 @@ int MergeTexture::get_texture_count() {
 	return _rects.size();
 }
 
+Ref<ImageTexture> MergeTexture::get_generated_texture(int index) {
+	ERR_FAIL_INDEX_V(index, _generated_textures.size(), Ref<ImageTexture>());
+
+	return _generated_textures.get(index);
+}
+int MergeTexture::get_generated_texture_count() {
+	return _generated_textures.size();
+}
+
 void MergeTexture::merge() {
-	const int RECTS = 200;
-	const bool ALLOW_FLIP = false;
-
 	_bins.clear();
-	_generated_textures.clear();
 
-	if (pack(_rects.ptr(), _rects.size(), 400, ALLOW_FLIP, _bins)) {
-		print_error("ok");
+	if (pack(_rects.ptr(), _rects.size(), 1024, false, _bins)) {
+		_generated_textures.clear();
+
+		_generated_textures.resize(_bins.size());
 
 		for (int i = 0; i < _bins.size(); ++i) {
-			
-
 			bin b = _bins[i];
 
 			PoolByteArray data;
 			data.resize(b.size.w * b.size.h * 4);
-			data.fill_with(0); // so it's transparent by default
+
+			// so it's transparent by default
+			for (int j = 0; j < data.size(); ++j) {
+				data.set(j, 0);
+			}
 
 			for (int j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
 
 				Ref<Texture> otext = r->original_texture;
 
-				if (!otext.is_valid()) {
-					print_error("MergeTexture->merge: !otext.is_valid()");
-					continue;
-				}
+				ERR_CONTINUE(!otext.is_valid());
 
 				Ref<Image> img = otext->get_data();
 
-				if (!img.is_valid()) {
-					print_error("MergeTexture->merge: !img.is_valid()");
-					continue;
-				}
+				ERR_CONTINUE(!img.is_valid());
 
 				PoolByteArray image_data = img->get_data();
 
+				int indx = 0;
+				for (int y = 0; y < r->h; ++y) {
+					int start_indx = r->y + y * (b.size.w) * 4 + (r->x * 4);
+
+					int row_width = r->w * 4;
+					for (int x = 0; x < row_width; ++x) {
+						data.set(start_indx + x, image_data[indx]);
+						++indx;
+					}
+				}
 			}
 
+			Ref<Image> image;
+			image.instance();
+			image->create(b.size.w, b.size.h, false, Image::FORMAT_RGBA8, data);
 
-			//Image(int p_width, int p_height, bool p_mipmaps, Format p_format, const PoolVector<uint8_t> &p_data);
-			//Ref<Image> image;
-			//image.instance();
+			Ref<ImageTexture> texture;
+			texture.instance();
+			texture->create_from_image(image, 0);
+
+			_generated_textures.set(i, texture);
 
 			for (int j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
 
 				Ref<AtlasTexture> at = r->atlas_texture;
 
-				//at->set_atlas(texture);
+				at->set_atlas(texture);
 				at->set_region(Rect2(r->x, r->y, r->w, r->h));
 			}
 		}
@@ -180,4 +198,16 @@ MergeTexture::~MergeTexture() {
 
 void MergeTexture::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("test"), &MergeTexture::test);
+
+	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &MergeTexture::add_texture);
+	ClassDB::bind_method(D_METHOD("get_texture", "index"), &MergeTexture::get_texture);
+	ClassDB::bind_method(D_METHOD("get_original_texture", "index"), &MergeTexture::get_original_texture);
+	ClassDB::bind_method(D_METHOD("remove_texture_index", "index"), &MergeTexture::remove_texture_index);
+	ClassDB::bind_method(D_METHOD("remove_texture", "texture"), &MergeTexture::remove_texture);
+	ClassDB::bind_method(D_METHOD("get_texture_count"), &MergeTexture::get_texture_count);
+
+	ClassDB::bind_method(D_METHOD("get_generated_texture", "index"), &MergeTexture::get_generated_texture);
+	ClassDB::bind_method(D_METHOD("get_generated_texture_count"), &MergeTexture::get_generated_texture_count);
+
+	ClassDB::bind_method(D_METHOD("merge"), &MergeTexture::merge);
 }
