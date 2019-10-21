@@ -1,7 +1,27 @@
 #include "texture_packer.h"
 
-Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
+int TexturePacker::get_texture_flags() const {
+	return _texture_flags;
+}
+void TexturePacker::set_texture_flags(const int flags) {
+	_texture_flags = flags;
+}
 
+int TexturePacker::get_max_atlas_size() const {
+	return _max_atlas_size;
+}
+void TexturePacker::set_max_atlas_size(const int size) {
+	_max_atlas_size = size;
+}
+
+bool TexturePacker::get_keep_original_atlases() const {
+	return _keep_original_atlases;
+}
+void TexturePacker::set_keep_original_atlases(const bool value) {
+	_keep_original_atlases = value;
+}
+
+Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
@@ -53,12 +73,15 @@ void TexturePacker::remove_texture_index(int index) {
 }
 
 void TexturePacker::remove_texture(Ref<Texture> texture) {
-
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
+		//TODO refcount!
 		if (r->original_texture == texture) {
 			_rects.remove(i);
+
+			memdelete(r);
+
 			return;
 		}
 	}
@@ -80,7 +103,7 @@ int TexturePacker::get_generated_texture_count() {
 void TexturePacker::merge() {
 	_bins.clear();
 
-	if (pack(_rects.ptr(), _rects.size(), 1024, false, _bins)) {
+	if (pack(_rects.ptr(), _rects.size(), _max_atlas_size, false, _bins)) {
 		_generated_textures.clear();
 
 		_generated_textures.resize(_bins.size());
@@ -125,11 +148,12 @@ void TexturePacker::merge() {
 			image.instance();
 			image->create(b.size.w, b.size.h, false, Image::FORMAT_RGBA8, data);
 
-			Ref<ImageTexture> texture;
-			texture.instance();
-			texture->create_from_image(image, 0);
+			Ref<ImageTexture> texture = _generated_textures.get(i);
 
-			_generated_textures.set(i, texture);
+			if (!texture.is_valid())
+				texture.instance();
+
+			texture->create_from_image(image, _texture_flags);
 
 			for (int j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
@@ -144,10 +168,12 @@ void TexturePacker::merge() {
 }
 
 TexturePacker::TexturePacker() {
+	_texture_flags = Texture::FLAGS_DEFAULT;
+	_max_atlas_size = 1024;
+	_keep_original_atlases = false;
 }
 
 TexturePacker::~TexturePacker() {
-
 	_bins.clear();
 
 	for (int i = 0; i < _rects.size(); ++i) {
@@ -163,6 +189,18 @@ TexturePacker::~TexturePacker() {
 }
 
 void TexturePacker::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_texture_flags"), &TexturePacker::get_texture_flags);
+	ClassDB::bind_method(D_METHOD("set_texture_flags", "flags"), &TexturePacker::set_texture_flags);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "texture_flags", PROPERTY_HINT_FLAGS, "Mipmaps,Repeat,Filter,Anisotropic Linear,Convert to Linear,Mirrored Repeat,Video Surface"), "set_texture_flags", "get_texture_flags");
+
+	ClassDB::bind_method(D_METHOD("get_max_atlas_size"), &TexturePacker::get_max_atlas_size);
+	ClassDB::bind_method(D_METHOD("set_max_atlas_size", "size"), &TexturePacker::set_max_atlas_size);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_atlas_size"), "set_max_atlas_size", "get_max_atlas_size");
+
+	ClassDB::bind_method(D_METHOD("get_keep_original_atlases"), &TexturePacker::get_keep_original_atlases);
+	ClassDB::bind_method(D_METHOD("set_keep_original_atlases", "value"), &TexturePacker::set_keep_original_atlases);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "keep_original_atlases"), "set_keep_original_atlases", "get_keep_original_atlases");
+
 	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TexturePacker::add_texture);
 	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TexturePacker::get_texture);
 	ClassDB::bind_method(D_METHOD("get_original_texture", "index"), &TexturePacker::get_original_texture);

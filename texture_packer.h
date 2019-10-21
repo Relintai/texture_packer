@@ -15,6 +15,15 @@ class TexturePacker : public Reference {
 	GDCLASS(TexturePacker, Reference);
 
 public:
+	int get_texture_flags() const;
+	void set_texture_flags(const int flags);
+
+	int get_max_atlas_size() const;
+	void set_max_atlas_size(const int size);
+
+	bool get_keep_original_atlases() const;
+	void set_keep_original_atlases(const bool value);
+
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
 	Ref<AtlasTexture> get_texture(int index);
 	Ref<Texture> get_original_texture(int index);
@@ -34,6 +43,8 @@ protected:
 	static void _bind_methods();
 
 private:
+	int _texture_flags;
+	int _max_atlas_size;
 	bool _keep_original_atlases;
 
 	std::vector<bin> _bins;
