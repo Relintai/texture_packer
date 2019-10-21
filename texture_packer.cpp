@@ -111,7 +111,7 @@ void TexturePacker::merge() {
 
 				int indx = 0;
 				for (int y = 0; y < r->h; ++y) {
-					int start_indx = r->y + y * (b.size.w) * 4 + (r->x * 4);
+					int start_indx = (r->y + y) * b.size.w * 4 + (r->x * 4);
 
 					int row_width = r->w * 4;
 					for (int x = 0; x < row_width; ++x) {
