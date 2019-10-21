@@ -131,6 +131,27 @@ int TexturePacker::get_texture_count() {
 	return _rects.size();
 }
 
+void TexturePacker::clear() {
+	_bins.clear();
+
+	for (int i = 0; i < _rects.size(); ++i) {
+		rect_xywhf *r = _rects.get(i);
+
+		r->atlas_texture.unref();
+		r->original_texture.unref();
+
+		memdelete(r);
+	}
+
+	_rects.clear();
+
+	for (int i = 0; i < _generated_textures.size(); ++i) {
+		_generated_textures.get(i).unref();
+	}
+
+	_generated_textures.clear();
+}
+
 Ref<ImageTexture> TexturePacker::get_generated_texture(int index) {
 	ERR_FAIL_INDEX_V(index, _generated_textures.size(), Ref<ImageTexture>());
 
@@ -226,18 +247,7 @@ TexturePacker::TexturePacker() {
 }
 
 TexturePacker::~TexturePacker() {
-	_bins.clear();
-
-	for (int i = 0; i < _rects.size(); ++i) {
-		rect_xywhf *r = _rects.get(i);
-
-		r->atlas_texture.unref();
-		r->original_texture.unref();
-
-		memdelete(r);
-	}
-
-	_rects.clear();
+	clear();
 }
 
 void TexturePacker::_bind_methods() {
@@ -259,6 +269,7 @@ void TexturePacker::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("remove_texture_index", "index"), &TexturePacker::remove_texture_index);
 	ClassDB::bind_method(D_METHOD("remove_texture", "texture"), &TexturePacker::remove_texture);
 	ClassDB::bind_method(D_METHOD("get_texture_count"), &TexturePacker::get_texture_count);
+	ClassDB::bind_method(D_METHOD("clear"), &TexturePacker::clear);
 
 	ClassDB::bind_method(D_METHOD("get_generated_texture", "index"), &TexturePacker::get_generated_texture);
 	ClassDB::bind_method(D_METHOD("get_generated_texture_count"), &TexturePacker::get_generated_texture_count);

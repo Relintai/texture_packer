@@ -29,6 +29,7 @@ public:
 	void remove_texture_index(int index);
 	void remove_texture(Ref<Texture> texture);
 	int get_texture_count();
+	void clear();
 
 	Ref<ImageTexture> get_generated_texture(int index);
 	int get_generated_texture_count();
