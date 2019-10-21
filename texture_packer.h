@@ -1,8 +1,9 @@
 #ifndef TEXTURE_PACKER_H
 #define TEXTURE_PACKER_H
 
-#include "core/image.h"
 #include "core/reference.h"
+#include "core/image.h"
+#include "core/color.h"
 #include "core/ustring.h"
 #include "core/vector.h"
 #include "scene/resources/texture.h"
@@ -22,6 +23,9 @@ public:
 
 	bool get_keep_original_atlases() const;
 	void set_keep_original_atlases(const bool value);
+
+	Color get_background_color() const;
+	void set_background_color(const Color color);
 
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
 	Ref<AtlasTexture> get_texture(int index);
@@ -50,6 +54,7 @@ private:
 	int _texture_flags;
 	int _max_atlas_size;
 	bool _keep_original_atlases;
+	Color _background_color;
 
 	Vector<rect_xywhf *> _rects;
 	Vector<Ref<ImageTexture> > _generated_textures;

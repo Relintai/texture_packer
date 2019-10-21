@@ -21,6 +21,13 @@ void TexturePacker::set_keep_original_atlases(const bool value) {
 	_keep_original_atlases = value;
 }
 
+Color TexturePacker::get_background_color() const {
+	return _background_color;
+}
+void TexturePacker::set_background_color(const Color color) {
+	_background_color = color;
+}
+
 Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 	Ref<AtlasTexture> atlas_text = texture;
 
@@ -222,11 +229,20 @@ void TexturePacker::merge() {
 			PoolByteArray data;
 			data.resize(b.size.w * b.size.h * 4);
 
-			// so it's transparent by default
-			for (int j = 0; j < data.size(); ++j) {
-				data.set(j, 0);
+			//Setup background color
+			uint8_t cr = _background_color.r * 255.0; 
+			uint8_t cg = _background_color.g * 255.0; 
+			uint8_t cb = _background_color.b * 255.0; 
+			uint8_t ca = _background_color.a * 255.0; 
+
+			for (int j = 0; j < data.size(); j += 4) {
+				data.set(j, cr);
+				data.set(j + 1, cg);
+				data.set(j + 2, cb);
+				data.set(j + 3, ca);
 			}
 
+			//Process rects
 			for (int j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
 
@@ -310,6 +326,10 @@ void TexturePacker::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_keep_original_atlases"), &TexturePacker::get_keep_original_atlases);
 	ClassDB::bind_method(D_METHOD("set_keep_original_atlases", "value"), &TexturePacker::set_keep_original_atlases);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "keep_original_atlases"), "set_keep_original_atlases", "get_keep_original_atlases");
+
+	ClassDB::bind_method(D_METHOD("get_background_color"), &TexturePacker::get_background_color);
+	ClassDB::bind_method(D_METHOD("set_background_color", "color"), &TexturePacker::set_background_color);
+	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "background_color"), "set_background_color", "get_background_color");
 
 	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TexturePacker::add_texture);
 	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TexturePacker::get_texture);
