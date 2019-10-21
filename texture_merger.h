@@ -26,6 +26,9 @@ public:
 	int get_margin() const;
 	void set_margin(const int margin);
 
+	bool get_automatic_merge() const;
+	void set_automatic_merge(const bool value);
+
 	Ref<TexturePacker> get_packer() const;
 	void set_packer(const Ref<TexturePacker> packer);
 
@@ -57,6 +60,8 @@ protected:
 	static void _bind_methods();
 
 private:
+	bool _automatic_merge;
+
 	Ref<TexturePacker> _packer;
 	Vector<Ref<Texture> > _textures;
 };

@@ -35,6 +35,13 @@ void TextureMerger::set_margin(const int margin) {
 	_packer->set_margin(margin);
 }
 
+bool TextureMerger::get_automatic_merge() const {
+	return _automatic_merge;
+}
+void TextureMerger::set_automatic_merge(const bool value) {
+	_automatic_merge = value;
+}
+
 Ref<TexturePacker> TextureMerger::get_packer() const {
 	return _packer;
 }
@@ -69,8 +76,8 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 		}
 	}
 
-	if (texture_added)
-		_packer->merge();
+	if (texture_added && _automatic_merge)
+		merge();
 }
 
 Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
@@ -126,9 +133,13 @@ int TextureMerger::get_generated_texture_count() {
 
 void TextureMerger::merge() {
 	_packer->merge();
+
+	emit_signal("texture_merged");
 }
 
 TextureMerger::TextureMerger() {
+	_automatic_merge = true;
+
 	_packer.instance();
 	_packer->set_keep_original_atlases(true);
 }
@@ -138,6 +149,8 @@ TextureMerger::~TextureMerger() {
 }
 
 void TextureMerger::_bind_methods() {
+	ADD_SIGNAL(MethodInfo("texture_merged"));
+
 	ClassDB::bind_method(D_METHOD("get_texture_flags"), &TextureMerger::get_texture_flags);
 	ClassDB::bind_method(D_METHOD("set_texture_flags", "flags"), &TextureMerger::set_texture_flags);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "texture_flags", PROPERTY_HINT_FLAGS, "Mipmaps,Repeat,Filter,Anisotropic Linear,Convert to Linear,Mirrored Repeat,Video Surface"), "set_texture_flags", "get_texture_flags");
@@ -157,6 +170,10 @@ void TextureMerger::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_margin"), &TextureMerger::get_margin);
 	ClassDB::bind_method(D_METHOD("set_margin", "size"), &TextureMerger::set_margin);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "margin"), "set_margin", "get_margin");
+
+	ClassDB::bind_method(D_METHOD("get_automatic_merge"), &TextureMerger::get_automatic_merge);
+	ClassDB::bind_method(D_METHOD("set_automatic_merge", "value"), &TextureMerger::set_automatic_merge);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "automatic_merge"), "set_automatic_merge", "get_automatic_merge");
 
 	ClassDB::bind_method(D_METHOD("get_textures"), &TextureMerger::get_textures);
 	ClassDB::bind_method(D_METHOD("set_textures", "textures"), &TextureMerger::set_textures);
