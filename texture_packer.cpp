@@ -235,7 +235,6 @@ void TexturePacker::merge() {
 
 				int rect_pos_x = 0;
 				int rect_pos_y = 0;
-				int img_width = otext->get_size().x;
 
 				if (aotext.is_valid()) {
 					otext = aotext->get_atlas();
@@ -251,6 +250,8 @@ void TexturePacker::merge() {
 				Ref<Image> img = otext->get_data();
 
 				ERR_CONTINUE(!img.is_valid());
+
+				int img_width = img->get_size().x;
 
 				PoolByteArray image_data = img->get_data();
 
