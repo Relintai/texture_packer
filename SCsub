@@ -2,5 +2,5 @@ Import('env')
 
 env.add_source_files(env.modules_sources,"register_types.cpp")
 
-env.add_source_files(env.modules_sources,"merge_texture.cpp")
+env.add_source_files(env.modules_sources,"texture_packer.cpp")
 env.add_source_files(env.modules_sources,"rectpack2D/pack.cpp")

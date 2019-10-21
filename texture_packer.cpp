@@ -1,6 +1,6 @@
-#include "merge_texture.h"
+#include "texture_packer.h"
 
-Ref<AtlasTexture> MergeTexture::add_texture(Ref<Texture> texture) {
+Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
@@ -28,19 +28,19 @@ Ref<AtlasTexture> MergeTexture::add_texture(Ref<Texture> texture) {
 	return tex;
 }
 
-Ref<Texture> MergeTexture::get_original_texture(int index) {
+Ref<Texture> TexturePacker::get_original_texture(int index) {
 	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<Texture>());
 
 	return _rects.get(index)->original_texture;
 }
 
-Ref<AtlasTexture> MergeTexture::get_texture(int index) {
+Ref<AtlasTexture> TexturePacker::get_texture(int index) {
 	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<AtlasTexture>());
 
 	return _rects.get(index)->atlas_texture;
 }
 
-void MergeTexture::remove_texture_index(int index) {
+void TexturePacker::remove_texture_index(int index) {
 	ERR_FAIL_INDEX(index, _rects.size());
 
 	rect_xywhf *r = _rects.get(index);
@@ -52,7 +52,7 @@ void MergeTexture::remove_texture_index(int index) {
 	memdelete(r);
 }
 
-void MergeTexture::remove_texture(Ref<Texture> texture) {
+void TexturePacker::remove_texture(Ref<Texture> texture) {
 
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
@@ -64,20 +64,20 @@ void MergeTexture::remove_texture(Ref<Texture> texture) {
 	}
 }
 
-int MergeTexture::get_texture_count() {
+int TexturePacker::get_texture_count() {
 	return _rects.size();
 }
 
-Ref<ImageTexture> MergeTexture::get_generated_texture(int index) {
+Ref<ImageTexture> TexturePacker::get_generated_texture(int index) {
 	ERR_FAIL_INDEX_V(index, _generated_textures.size(), Ref<ImageTexture>());
 
 	return _generated_textures.get(index);
 }
-int MergeTexture::get_generated_texture_count() {
+int TexturePacker::get_generated_texture_count() {
 	return _generated_textures.size();
 }
 
-void MergeTexture::merge() {
+void TexturePacker::merge() {
 	_bins.clear();
 
 	if (pack(_rects.ptr(), _rects.size(), 1024, false, _bins)) {
@@ -143,7 +143,7 @@ void MergeTexture::merge() {
 	}
 }
 
-String MergeTexture::test() {
+String TexturePacker::test() {
 	String res = "";
 
 	const int RECTS = 200;
@@ -177,10 +177,10 @@ String MergeTexture::test() {
 	return res;
 }
 
-MergeTexture::MergeTexture() {
+TexturePacker::TexturePacker() {
 }
 
-MergeTexture::~MergeTexture() {
+TexturePacker::~TexturePacker() {
 
 	_bins.clear();
 
@@ -196,18 +196,18 @@ MergeTexture::~MergeTexture() {
 	_rects.clear();
 }
 
-void MergeTexture::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("test"), &MergeTexture::test);
+void TexturePacker::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("test"), &TexturePacker::test);
 
-	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &MergeTexture::add_texture);
-	ClassDB::bind_method(D_METHOD("get_texture", "index"), &MergeTexture::get_texture);
-	ClassDB::bind_method(D_METHOD("get_original_texture", "index"), &MergeTexture::get_original_texture);
-	ClassDB::bind_method(D_METHOD("remove_texture_index", "index"), &MergeTexture::remove_texture_index);
-	ClassDB::bind_method(D_METHOD("remove_texture", "texture"), &MergeTexture::remove_texture);
-	ClassDB::bind_method(D_METHOD("get_texture_count"), &MergeTexture::get_texture_count);
+	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TexturePacker::add_texture);
+	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TexturePacker::get_texture);
+	ClassDB::bind_method(D_METHOD("get_original_texture", "index"), &TexturePacker::get_original_texture);
+	ClassDB::bind_method(D_METHOD("remove_texture_index", "index"), &TexturePacker::remove_texture_index);
+	ClassDB::bind_method(D_METHOD("remove_texture", "texture"), &TexturePacker::remove_texture);
+	ClassDB::bind_method(D_METHOD("get_texture_count"), &TexturePacker::get_texture_count);
 
-	ClassDB::bind_method(D_METHOD("get_generated_texture", "index"), &MergeTexture::get_generated_texture);
-	ClassDB::bind_method(D_METHOD("get_generated_texture_count"), &MergeTexture::get_generated_texture_count);
+	ClassDB::bind_method(D_METHOD("get_generated_texture", "index"), &TexturePacker::get_generated_texture);
+	ClassDB::bind_method(D_METHOD("get_generated_texture_count"), &TexturePacker::get_generated_texture_count);
 
-	ClassDB::bind_method(D_METHOD("merge"), &MergeTexture::merge);
+	ClassDB::bind_method(D_METHOD("merge"), &TexturePacker::merge);
 }

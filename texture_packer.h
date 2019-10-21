@@ -1,5 +1,5 @@
-#ifndef MERGE_TEXTURE_H
-#define MERGE_TEXTURE_H
+#ifndef TEXTURE_PACKER_H
+#define TEXTURE_PACKER_H
 
 #include "core/image.h"
 #include "core/reference.h"
@@ -11,8 +11,8 @@
 #include "rectpack2D/pack.h"
 
 //Rename to TexturePacker
-class MergeTexture : public Reference {
-	GDCLASS(MergeTexture, Reference);
+class TexturePacker : public Reference {
+	GDCLASS(TexturePacker, Reference);
 
 public:
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
@@ -29,8 +29,8 @@ public:
 
 	String test();
 
-	MergeTexture();
-	~MergeTexture();
+	TexturePacker();
+	~TexturePacker();
 
 protected:
 	static void _bind_methods();
