@@ -10,7 +10,8 @@
 
 #include "rectpack2D/pack.h"
 
-//Rename to TexturePacker
+//TODO margins, refcount
+
 class TexturePacker : public Reference {
 	GDCLASS(TexturePacker, Reference);
 

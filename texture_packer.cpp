@@ -22,15 +22,55 @@ void TexturePacker::set_keep_original_atlases(const bool value) {
 }
 
 Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
+	Ref<AtlasTexture> atlas_text = texture;
+
+	if (atlas_text.is_valid()) {
+		//If the supplied texture is an AtlasTexture, we set it as the target, and we create the original
+
+		//we need to check differently this case
+		for (int i = 0; i < _rects.size(); ++i) {
+			rect_xywhf *r = _rects.get(i);
+			//Refcount!
+			if (r->atlas_texture == texture)
+				return r->atlas_texture;
+		}
+
+		Ref<AtlasTexture> tex;
+		tex.instance();
+
+		tex->set_atlas(atlas_text->get_atlas());
+		tex->set_region(atlas_text->get_region());
+
+		rect_xywhf *rect = memnew(rect_xywhf);
+
+		rect->w = atlas_text->get_region().size.x;
+		rect->h = atlas_text->get_region().size.y;
+
+		_rects.push_back(rect);
+
+		if (_keep_original_atlases) {
+			rect->original_texture = tex;
+			rect->atlas_texture = atlas_text;
+
+			return atlas_text;
+		} else {
+			rect->original_texture = atlas_text;
+			rect->atlas_texture = tex;
+
+			return tex;
+		}
+	}
+
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
-
+		//Refcount!
 		if (r->original_texture == texture)
 			return r->atlas_texture;
 	}
 
 	Ref<AtlasTexture> tex;
 	tex.instance();
+
 	//Temp setup, so the texture is usable even while the atlases are generating.
 	tex->set_atlas(texture);
 	tex->set_region(Rect2(0, 0, texture->get_width(), texture->get_height()));
@@ -123,6 +163,20 @@ void TexturePacker::merge() {
 				rect_xywhf *r = b.rects[j];
 
 				Ref<Texture> otext = r->original_texture;
+				Ref<AtlasTexture> aotext = otext;
+
+				int rect_pos_x = 0;
+				int rect_pos_y = 0;
+				int img_width = otext->get_size().x;
+
+				if (aotext.is_valid()) {
+					otext = aotext->get_atlas();
+
+					Rect2 rect = aotext->get_region();
+
+					rect_pos_x = rect.position.x + 0.5;
+					rect_pos_y = rect.position.y + 0.5;
+				}
 
 				ERR_CONTINUE(!otext.is_valid());
 
@@ -132,14 +186,13 @@ void TexturePacker::merge() {
 
 				PoolByteArray image_data = img->get_data();
 
-				int indx = 0;
 				for (int y = 0; y < r->h; ++y) {
-					int start_indx = (r->y + y) * b.size.w * 4 + (r->x * 4);
+					int indx = (rect_pos_y + y) * img_width * 4 + rect_pos_x * 4;
+					int start_indx = (r->y + y) * b.size.w * 4 + r->x * 4;
 
 					int row_width = r->w * 4;
 					for (int x = 0; x < row_width; ++x) {
-						data.set(start_indx + x, image_data[indx]);
-						++indx;
+						data.set(start_indx + x, image_data[indx + x]);
 					}
 				}
 			}
@@ -148,12 +201,11 @@ void TexturePacker::merge() {
 			image.instance();
 			image->create(b.size.w, b.size.h, false, Image::FORMAT_RGBA8, data);
 
-			Ref<ImageTexture> texture = _generated_textures.get(i);
-
-			if (!texture.is_valid())
-				texture.instance();
-
+			Ref<ImageTexture> texture;
+			texture.instance();
 			texture->create_from_image(image, _texture_flags);
+
+			_generated_textures.set(i, texture);
 
 			for (int j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
