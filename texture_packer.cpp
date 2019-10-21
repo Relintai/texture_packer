@@ -181,8 +181,6 @@ int TexturePacker::get_texture_count() {
 }
 
 void TexturePacker::clear() {
-	_bins.clear();
-
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
@@ -211,15 +209,15 @@ int TexturePacker::get_generated_texture_count() {
 }
 
 void TexturePacker::merge() {
-	_bins.clear();
+	std::vector<bin> bins;
 
-	if (pack(_rects.ptr(), _rects.size(), _max_atlas_size, false, _bins)) {
+	if (pack(_rects.ptr(), _rects.size(), _max_atlas_size, false, bins)) {
 		_generated_textures.clear();
 
-		_generated_textures.resize(_bins.size());
+		_generated_textures.resize(bins.size());
 
-		for (int i = 0; i < _bins.size(); ++i) {
-			bin b = _bins[i];
+		for (int i = 0; i < bins.size(); ++i) {
+			bin b = bins[i];
 
 			PoolByteArray data;
 			data.resize(b.size.w * b.size.h * 4);

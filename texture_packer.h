@@ -51,8 +51,6 @@ private:
 	int _max_atlas_size;
 	bool _keep_original_atlases;
 
-	std::vector<bin> _bins;
-
 	Vector<rect_xywhf *> _rects;
 	Vector<Ref<ImageTexture> > _generated_textures;
 };
