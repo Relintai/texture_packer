@@ -313,7 +313,7 @@ void TexturePacker::merge() {
 }
 
 TexturePacker::TexturePacker() {
-	_texture_flags = Texture::FLAGS_DEFAULT;
+	_texture_flags = Texture::FLAG_MIPMAPS | Texture::FLAG_FILTER;
 	_max_atlas_size = 1024;
 	_keep_original_atlases = false;
 	_margin = 0;
