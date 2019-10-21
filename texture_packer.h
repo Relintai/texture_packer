@@ -33,6 +33,7 @@ public:
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
 	Ref<AtlasTexture> get_texture(int index);
 	Ref<Texture> get_original_texture(int index);
+	bool contains_texture(Ref<Texture> texture);
 
 	void unref_texture_index(int index);
 	void unref_texture(Ref<Texture> texture);

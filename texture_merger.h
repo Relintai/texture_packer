@@ -3,6 +3,8 @@
 
 #include "scene/main/node.h"
 
+#include "core/vector.h"
+
 #include "texture_packer.h"
 
 class TextureMerger : public Node {
@@ -27,9 +29,13 @@ public:
 	Ref<TexturePacker> get_packer() const;
 	void set_packer(const Ref<TexturePacker> packer);
 
+	Vector<Variant> get_textures();
+	void set_textures(const Vector<Variant> &textures);
+
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
 	Ref<AtlasTexture> get_texture(int index);
 	Ref<Texture> get_original_texture(int index);
+	bool contains_texture(Ref<Texture> texture);
 
 	void unref_texture_index(int index);
 	void unref_texture(Ref<Texture> texture);
@@ -52,6 +58,7 @@ protected:
 
 private:
 	Ref<TexturePacker> _packer;
+	Vector<Ref<Texture> > _textures;
 };
 
 #endif

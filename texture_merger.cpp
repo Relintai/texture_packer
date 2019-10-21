@@ -31,7 +31,7 @@ void TextureMerger::set_background_color(const Color color) {
 int TextureMerger::get_margin() const {
 	return _packer->get_margin();
 }
-void TextureMerger::set_margin(const int margin){
+void TextureMerger::set_margin(const int margin) {
 	_packer->set_margin(margin);
 }
 
@@ -42,12 +42,51 @@ void TextureMerger::set_packer(const Ref<TexturePacker> packer) {
 	_packer = packer;
 }
 
+Vector<Variant> TextureMerger::get_textures() {
+	Vector<Variant> r;
+	for (int i = 0; i < _textures.size(); i++) {
+		r.push_back(_textures[i].get_ref_ptr());
+	}
+	return r;
+}
+void TextureMerger::set_textures(const Vector<Variant> &textures) {
+	_textures.clear();
+	_textures.resize(textures.size());
+
+	for (int i = 0; i < textures.size(); i++) {
+		Ref<Texture> texture = Ref<Texture>(textures[i]);
+
+		_textures.set(i, texture);
+	}
+
+	bool texture_added = false;
+	for (int i = 0; i < _textures.size(); ++i) {
+		Ref<Texture> tex = _textures.get(i);
+
+		if (tex.is_valid() && !_packer->contains_texture(tex)) {
+			_packer->add_texture(tex);
+			texture_added = true;
+		}
+	}
+
+	if (texture_added)
+		_packer->merge();
+}
+
 Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
+	ERR_FAIL_COND_V(!texture.is_valid(), Ref<AtlasTexture>());
+
+	_textures.push_back(texture);
+
 	return _packer->add_texture(texture);
 }
 
 Ref<Texture> TextureMerger::get_original_texture(int index) {
 	return _packer->get_original_texture(index);
+}
+
+bool TextureMerger::contains_texture(Ref<Texture> texture) {
+	return _packer->contains_texture(texture);
 }
 
 Ref<AtlasTexture> TextureMerger::get_texture(int index) {
@@ -118,6 +157,13 @@ void TextureMerger::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_margin"), &TextureMerger::get_margin);
 	ClassDB::bind_method(D_METHOD("set_margin", "size"), &TextureMerger::set_margin);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "margin"), "set_margin", "get_margin");
+
+	ClassDB::bind_method(D_METHOD("get_textures"), &TextureMerger::get_textures);
+	ClassDB::bind_method(D_METHOD("set_textures", "textures"), &TextureMerger::set_textures);
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "textures", PROPERTY_HINT_NONE, "17/17:Texture", PROPERTY_USAGE_DEFAULT, "Texture"), "set_textures", "get_textures");
+
+	ClassDB::bind_method(D_METHOD("get_packer"), &TextureMerger::get_packer);
+	ClassDB::bind_method(D_METHOD("set_packer", "packer"), &TextureMerger::set_packer);
 
 	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TextureMerger::add_texture);
 	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TextureMerger::get_texture);

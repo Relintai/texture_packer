@@ -39,13 +39,19 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 	Ref<AtlasTexture> atlas_text = texture;
 
 	if (atlas_text.is_valid()) {
-		//If the supplied texture is an AtlasTexture, we set it as the target, and we create the original
-
 		//we need to check differently this case
 		for (int i = 0; i < _rects.size(); ++i) {
 			rect_xywhf *r = _rects.get(i);
 
-			if (r->atlas_texture == texture) {
+			Ref<Texture> t;
+			Ref<AtlasTexture> at = texture;
+
+			if (_keep_original_atlases && at.is_valid())
+				t = r->atlas_texture;
+			else
+				t = r->original_texture;
+
+			if (t == texture) {
 				++(r->refcount);
 
 				return r->atlas_texture;
@@ -122,6 +128,26 @@ Ref<AtlasTexture> TexturePacker::get_texture(int index) {
 	return _rects.get(index)->atlas_texture;
 }
 
+bool TexturePacker::contains_texture(Ref<Texture> texture) {
+	for (int i = 0; i < _rects.size(); ++i) {
+		rect_xywhf *r = _rects.get(i);
+
+		Ref<Texture> t;
+		Ref<AtlasTexture> at = texture;
+
+		if (_keep_original_atlases && at.is_valid())
+			t = r->atlas_texture;
+		else
+			t = r->original_texture;
+
+		if (t == texture) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void TexturePacker::unref_texture_index(int index) {
 	ERR_FAIL_INDEX(index, _rects.size());
 
@@ -143,7 +169,15 @@ void TexturePacker::unref_texture(Ref<Texture> texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
-		if (r->original_texture == texture) {
+		Ref<Texture> t;
+		Ref<AtlasTexture> at = texture;
+
+		if (_keep_original_atlases && at.is_valid())
+			t = r->atlas_texture;
+		else
+			t = r->original_texture;
+
+		if (t == texture) {
 
 			int rc = --(r->refcount);
 
@@ -176,7 +210,15 @@ void TexturePacker::remove_texture(Ref<Texture> texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
-		if (r->original_texture == texture) {
+		Ref<Texture> t;
+		Ref<AtlasTexture> at = texture;
+
+		if (_keep_original_atlases && at.is_valid())
+			t = r->atlas_texture;
+		else
+			t = r->original_texture;
+
+		if (t == texture) {
 
 			_rects.remove(i);
 
