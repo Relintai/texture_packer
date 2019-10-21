@@ -1,3 +1,3 @@
 
-void register_merge_texture_types();
-void unregister_merge_texture_types();
+void register_texture_packer_types();
+void unregister_texture_packer_types();
