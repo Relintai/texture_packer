@@ -4,6 +4,7 @@
 #include "scene/main/node.h"
 
 #include "core/vector.h"
+#include "core/engine.h"
 
 #include "texture_packer.h"
 

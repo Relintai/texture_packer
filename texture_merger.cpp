@@ -66,6 +66,9 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 		_textures.set(i, texture);
 	}
 
+	if (Engine::get_singleton()->is_editor_hint())
+		return;
+
 	bool texture_added = false;
 	for (int i = 0; i < _textures.size(); ++i) {
 		Ref<Texture> tex = _textures.get(i);
