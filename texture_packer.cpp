@@ -30,9 +30,12 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 		//we need to check differently this case
 		for (int i = 0; i < _rects.size(); ++i) {
 			rect_xywhf *r = _rects.get(i);
-			//Refcount!
-			if (r->atlas_texture == texture)
+
+			if (r->atlas_texture == texture) {
+				++(r->refcount);
+
 				return r->atlas_texture;
+			}
 		}
 
 		Ref<AtlasTexture> tex;
@@ -43,6 +46,7 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 
 		rect_xywhf *rect = memnew(rect_xywhf);
 
+		rect->refcount = 1;
 		rect->w = atlas_text->get_region().size.x;
 		rect->h = atlas_text->get_region().size.y;
 
@@ -63,9 +67,12 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
-		//Refcount!
-		if (r->original_texture == texture)
+
+		if (r->original_texture == texture) {
+			++(r->refcount);
+
 			return r->atlas_texture;
+		}
 	}
 
 	Ref<AtlasTexture> tex;
@@ -77,6 +84,7 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 
 	rect_xywhf *rect = memnew(rect_xywhf);
 
+	rect->refcount = 1;
 	rect->original_texture = texture;
 	rect->atlas_texture = tex;
 
@@ -100,11 +108,49 @@ Ref<AtlasTexture> TexturePacker::get_texture(int index) {
 	return _rects.get(index)->atlas_texture;
 }
 
+void TexturePacker::unref_texture_index(int index) {
+	ERR_FAIL_INDEX(index, _rects.size());
+
+	rect_xywhf *r = _rects.get(index);
+
+	int rc = --(r->refcount);
+
+	if (rc <= 0) {
+		_rects.remove(index);
+
+		r->atlas_texture.unref();
+		r->atlas_texture.unref();
+
+		memdelete(r);
+	}
+}
+
+void TexturePacker::unref_texture(Ref<Texture> texture) {
+	for (int i = 0; i < _rects.size(); ++i) {
+		rect_xywhf *r = _rects.get(i);
+
+		if (r->original_texture == texture) {
+
+			int rc = --(r->refcount);
+
+			if (rc <= 0) {
+				_rects.remove(i);
+
+				r->atlas_texture.unref();
+				r->atlas_texture.unref();
+
+				memdelete(r);
+			}
+
+			return;
+		}
+	}
+}
+
 void TexturePacker::remove_texture_index(int index) {
 	ERR_FAIL_INDEX(index, _rects.size());
 
 	rect_xywhf *r = _rects.get(index);
-	_rects.remove(index);
 
 	r->atlas_texture.unref();
 	r->atlas_texture.unref();
@@ -116,9 +162,12 @@ void TexturePacker::remove_texture(Ref<Texture> texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
-		//TODO refcount!
 		if (r->original_texture == texture) {
+
 			_rects.remove(i);
+
+			r->atlas_texture.unref();
+			r->atlas_texture.unref();
 
 			memdelete(r);
 
@@ -266,8 +315,12 @@ void TexturePacker::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TexturePacker::add_texture);
 	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TexturePacker::get_texture);
 	ClassDB::bind_method(D_METHOD("get_original_texture", "index"), &TexturePacker::get_original_texture);
+
+	ClassDB::bind_method(D_METHOD("unref_texture_index", "index"), &TexturePacker::unref_texture_index);
+	ClassDB::bind_method(D_METHOD("unref_texture", "texture"), &TexturePacker::unref_texture);
 	ClassDB::bind_method(D_METHOD("remove_texture_index", "index"), &TexturePacker::remove_texture_index);
 	ClassDB::bind_method(D_METHOD("remove_texture", "texture"), &TexturePacker::remove_texture);
+
 	ClassDB::bind_method(D_METHOD("get_texture_count"), &TexturePacker::get_texture_count);
 	ClassDB::bind_method(D_METHOD("clear"), &TexturePacker::clear);
 

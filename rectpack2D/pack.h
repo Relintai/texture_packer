@@ -74,6 +74,8 @@ struct rect_xywhf : public rect_xywh {
 	void flip();
 	bool flipped;
 
+	int refcount;
+
 	Ref<AtlasTexture> atlas_texture;
 	Ref<Texture> original_texture;
 };
