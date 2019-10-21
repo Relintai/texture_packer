@@ -251,7 +251,7 @@ void TexturePacker::merge() {
 
 				ERR_CONTINUE(!img.is_valid());
 
-				int img_width = img->get_size().x;
+				int img_width = img->get_width();
 
 				PoolByteArray image_data = img->get_data();
 
