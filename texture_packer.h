@@ -27,8 +27,6 @@ public:
 
 	void merge();
 
-	String test();
-
 	TexturePacker();
 	~TexturePacker();
 
