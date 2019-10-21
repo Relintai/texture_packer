@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 
+#include "scene/resources/texture.h"
+
 /* of your interest:
 
 1. rect_xywhf - structure representing your rectangle object
@@ -71,6 +73,9 @@ struct rect_xywhf : public rect_xywh {
 	rect_xywhf();
 	void flip();
 	bool flipped;
+
+	Ref<AtlasTexture> atlas_texture;
+	Ref<Texture> original_texture;
 };
 
 struct bin {

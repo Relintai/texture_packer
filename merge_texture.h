@@ -1,21 +1,27 @@
 #ifndef MERGE_TEXTURE_H
 #define MERGE_TEXTURE_H
 
-#include <vector>
-
-#include "scene/resources/texture.h"
+#include "core/image.h"
+#include "core/reference.h"
 #include "core/ustring.h"
 #include "core/vector.h"
+#include "scene/resources/texture.h"
+#include <vector>
 
 #include "rectpack2D/pack.h"
 
-class MergeTexture : public ImageTexture {
-	GDCLASS(MergeTexture, ImageTexture);
+//Rename to TexturePacker
+class MergeTexture : public Reference {
+	GDCLASS(MergeTexture, Reference);
 
 public:
-	void add(Ref<Texture> texture);
-	void get_texture(int index);
+	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
+	Ref<AtlasTexture> get_texture(int index);
+	Ref<Texture> get_original_texture(int index);
+	void remove_texture_index(int index);
+	void remove_texture(Ref<Texture> texture);
 	int get_texture_count();
+
 	void merge();
 
 	String test();
@@ -23,20 +29,16 @@ public:
 	MergeTexture();
 	~MergeTexture();
 
-public:
-	struct MergeTextureEntry {
-		Ref<Texture> original_texture;
-		Ref<AtlasTexture> texture;
-		rect_xywhf rect;
-	};
-
 protected:
 	static void _bind_methods();
 
 private:
 	bool _keep_original_atlases;
+
 	std::vector<bin> _bins;
-	Vector<MergeTextureEntry> _entries;
+
+	Vector<rect_xywhf *> _rects;
+	Vector<Ref<ImageTexture> > _generated_textures;
 };
 
 #endif
