@@ -28,6 +28,13 @@ void TexturePacker::set_background_color(const Color color) {
 	_background_color = color;
 }
 
+int TexturePacker::get_margin() const {
+	return _margin;
+}
+void TexturePacker::set_margin(const int margin) {
+	_margin = margin;
+}
+
 Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 	Ref<AtlasTexture> atlas_text = texture;
 
@@ -54,8 +61,8 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 		rect_xywhf *rect = memnew(rect_xywhf);
 
 		rect->refcount = 1;
-		rect->w = atlas_text->get_region().size.x;
-		rect->h = atlas_text->get_region().size.y;
+		rect->w = atlas_text->get_region().size.x + 2 * _margin;
+		rect->h = atlas_text->get_region().size.y + 2 * _margin;
 
 		_rects.push_back(rect);
 
@@ -95,8 +102,8 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 	rect->original_texture = texture;
 	rect->atlas_texture = tex;
 
-	rect->w = texture->get_width();
-	rect->h = texture->get_height();
+	rect->w = texture->get_width() + 2 * _margin;
+	rect->h = texture->get_height() + 2 * _margin;
 
 	_rects.push_back(rect);
 
@@ -230,10 +237,10 @@ void TexturePacker::merge() {
 			data.resize(b.size.w * b.size.h * 4);
 
 			//Setup background color
-			uint8_t cr = _background_color.r * 255.0; 
-			uint8_t cg = _background_color.g * 255.0; 
-			uint8_t cb = _background_color.b * 255.0; 
-			uint8_t ca = _background_color.a * 255.0; 
+			uint8_t cr = _background_color.r * 255.0;
+			uint8_t cg = _background_color.g * 255.0;
+			uint8_t cb = _background_color.b * 255.0;
+			uint8_t ca = _background_color.a * 255.0;
 
 			for (int j = 0; j < data.size(); j += 4) {
 				data.set(j, cr);
@@ -271,13 +278,14 @@ void TexturePacker::merge() {
 
 				PoolByteArray image_data = img->get_data();
 
-				for (int y = 0; y < r->h; ++y) {
-					int indx = (rect_pos_y + y) * img_width * 4 + rect_pos_x * 4;
-					int start_indx = (r->y + y) * b.size.w * 4 + r->x * 4;
+				int h_wo_margin = r->h - 2 * _margin;
+				for (int y = 0; y < h_wo_margin; ++y) {
+					int orig_img_indx = (rect_pos_y + y) * img_width * 4 + rect_pos_x * 4;
+					int start_indx = (r->y + y + _margin) * b.size.w * 4 + (r->x + _margin) * 4;
 
-					int row_width = r->w * 4;
+					int row_width = (r->w - 2 * _margin) * 4;
 					for (int x = 0; x < row_width; ++x) {
-						data.set(start_indx + x, image_data[indx + x]);
+						data.set(start_indx + x, image_data[orig_img_indx + x]);
 					}
 				}
 			}
@@ -298,7 +306,7 @@ void TexturePacker::merge() {
 				Ref<AtlasTexture> at = r->atlas_texture;
 
 				at->set_atlas(texture);
-				at->set_region(Rect2(r->x, r->y, r->w, r->h));
+				at->set_region(Rect2(r->x + _margin, r->y + _margin, r->w - 2 * _margin, r->h - 2 * _margin));
 			}
 		}
 	}
@@ -308,6 +316,7 @@ TexturePacker::TexturePacker() {
 	_texture_flags = Texture::FLAGS_DEFAULT;
 	_max_atlas_size = 1024;
 	_keep_original_atlases = false;
+	_margin = 0;
 }
 
 TexturePacker::~TexturePacker() {
@@ -330,6 +339,10 @@ void TexturePacker::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_background_color"), &TexturePacker::get_background_color);
 	ClassDB::bind_method(D_METHOD("set_background_color", "color"), &TexturePacker::set_background_color);
 	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "background_color"), "set_background_color", "get_background_color");
+
+	ClassDB::bind_method(D_METHOD("get_margin"), &TexturePacker::get_margin);
+	ClassDB::bind_method(D_METHOD("set_margin", "size"), &TexturePacker::set_margin);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "margin"), "set_margin", "get_margin");
 
 	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TexturePacker::add_texture);
 	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TexturePacker::get_texture);

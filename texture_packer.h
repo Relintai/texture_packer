@@ -27,6 +27,9 @@ public:
 	Color get_background_color() const;
 	void set_background_color(const Color color);
 
+	int get_margin() const;
+	void set_margin(const int margin);
+
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
 	Ref<AtlasTexture> get_texture(int index);
 	Ref<Texture> get_original_texture(int index);
@@ -55,6 +58,7 @@ private:
 	int _max_atlas_size;
 	bool _keep_original_atlases;
 	Color _background_color;
+	int _margin;
 
 	Vector<rect_xywhf *> _rects;
 	Vector<Ref<ImageTexture> > _generated_textures;
