@@ -38,12 +38,11 @@ add_texture() will return an AtlasTexture, this is the texture you want to use i
 
 Supports filters, custom background color, margins.
 
-The keep_original_atlases option:
+### The keep_original_atlases option:
 
 If you set this to true, and then add AtlasTexture(s), TexturePacker will change these ones (the ones you actually added) 
 after the bake.
 You can use this for example to bake gui textures together, without changing the resources everywhere at runtime.
-Note: add_texture() will also return the AtlasTextures that you add.
 
 Note: I only recommend using this if your ui textures need to change during runtime, if they don't you are better off making
 the atlas yourself during development.
