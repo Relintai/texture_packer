@@ -12,13 +12,13 @@ Internally it uses the legacy version of [rectpack2D](https://github.com/TeamHyp
 git clone https://github.com/godotengine/godot.git godot
 ```
 
-2. go into Godot's modules directory.
+2. Go into Godot's modules directory.
 
 ```
 cd ./godot/modules/
 ```
 
-3. clone this repository
+3. Clone this repository
 
 ```
 git clone https://github.com/Relintai/texture_packer texture_packer
