@@ -4,6 +4,8 @@ This is a texture packer engine module, for the Godot Engine.
 
 Internally it uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/rectpack2D/tree/legacy)
 
+It *should* work on all platforms.
+
 # Building
 
 1. Get the source code for the Godot Engine.
