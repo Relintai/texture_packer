@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="TextureMerger" inherits="Node" category="Addon" version="3.2">
+	<brief_description>
+		A node, that can merge textures.
+	</brief_description>
+		This node can pack the textures given to it. It uses 
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_texture">
+			<return type="AtlasTexture">
+			</return>
+			<argument index="0" name="texture" type="Texture">
+			</argument>
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="texture_flags" type="int" setter="set_texture_flags" getter="get_texture_flags" default="5">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>
