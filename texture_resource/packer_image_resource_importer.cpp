@@ -13,7 +13,7 @@ void PackerImageResourceImporter::get_recognized_extensions(List<String> *p_exte
 }
 
 String PackerImageResourceImporter::get_save_extension() const {
-	return "tres";
+	return "restex";
 }
 
 String PackerImageResourceImporter::get_resource_type() const {

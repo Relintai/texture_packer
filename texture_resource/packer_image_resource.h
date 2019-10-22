@@ -8,7 +8,7 @@ class PackerImageResource : public Texture {
 
 	GDCLASS(PackerImageResource, Texture);
 
-	RES_BASE_EXTENSION("tres");
+	RES_BASE_EXTENSION("restex");
 
 public:
 	int get_width() const;
