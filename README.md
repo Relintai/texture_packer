@@ -43,7 +43,7 @@ Supports filters, custom background color, margins.
 If you set this to true, and then add AtlasTexture(s), TexturePacker will change these ones (the ones you actually added) 
 after the bake.
 
-You can use this for example to bake gui textures together, without changing the resources everywhere at runtime.
+You can use this to bake gui textures together, without changing the resources everywhere at runtime.
 Think of rpgs, when you have a huge number of potential icons that the player can put on his or her actionbars.
 You can look look at Tales of Maj'Eyal or pretty much every actually complex MMORPGs as an example.
 
