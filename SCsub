@@ -6,3 +6,9 @@ env.add_source_files(env.modules_sources,"texture_packer.cpp")
 env.add_source_files(env.modules_sources,"rectpack2D/pack.cpp")
 
 env.add_source_files(env.modules_sources,"texture_merger.cpp")
+
+env.add_source_files(env.modules_sources,"texture_resource/packer_image_resource.cpp")
+
+env.add_source_files(env.modules_sources,"texture_resource/editor_plugin_packer_image_resource.cpp")
+env.add_source_files(env.modules_sources,"texture_resource/packer_image_resource_importer.cpp")
+

@@ -5,6 +5,8 @@
 #include "editor/import/editor_import_plugin.h"
 #include "core/ustring.h"
 
+#include "core/image.h"
+#include "core/io/image_loader.h"
 
 class PackerImageResourceImporter : public EditorImportPlugin {
 
@@ -28,9 +30,6 @@ public:
 
 	PackerImageResourceImporter();
 	~PackerImageResourceImporter();
-
-private:
-	Ref<EditorSceneImporterCollada> _importer;
 };
 
 #endif

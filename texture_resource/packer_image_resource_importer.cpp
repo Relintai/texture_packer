@@ -1,4 +1,4 @@
-#include "editor_import_collada_mdr.h"
+#include "packer_image_resource_importer.h"
 
 String PackerImageResourceImporter::get_importer_name() const {
 	return "packer_image_resource";
@@ -40,20 +40,21 @@ bool PackerImageResourceImporter::get_option_visibility(const String &p_option, 
 }
 
 Error PackerImageResourceImporter::import(const String &p_source_file, const String &p_save_path, const Map<StringName, Variant> &p_options, List<String> *r_platform_variants, List<String> *r_gen_files, Variant *r_metadata) {
+
+	/*
 	Ref<Image> image;
 	image.instance();
 	Error err = ImageLoader::load_image(p_source_file, image, NULL, hdr_as_srgb, scale);
 
 	if (err != OK)
 		return err;
+		*/
 
-
+	return Error::FAILED;
 }
 
 PackerImageResourceImporter::PackerImageResourceImporter() {
-	_importer.instance();
 }
 
 PackerImageResourceImporter::~PackerImageResourceImporter() {
-	_importer.unref();
 }

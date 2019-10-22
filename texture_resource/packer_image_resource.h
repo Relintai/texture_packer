@@ -11,14 +11,25 @@ class PackerImageResource : public Texture {
 	RES_BASE_EXTENSION("tres");
 
 public:
-	void set_data(const Ref<Image> &p_image);
-	Ref<Image> get_data() const;
-
 	int get_width() const;
 	int get_height() const;
 
-	ImageTexture();
-	~ImageTexture();
+	RID get_rid() const;
+	bool has_alpha() const;
+
+	void set_flags(uint32_t p_flags);
+	uint32_t get_flags() const;
+
+	void draw(RID p_canvas_item, const Point2 &p_pos, const Color &p_modulate = Color(1, 1, 1), bool p_transpose = false, const Ref<Texture> &p_normal_map = Ref<Texture>()) const;
+	void draw_rect(RID p_canvas_item, const Rect2 &p_rect, bool p_tile = false, const Color &p_modulate = Color(1, 1, 1), bool p_transpose = false, const Ref<Texture> &p_normal_map = Ref<Texture>()) const;
+	void draw_rect_region(RID p_canvas_item, const Rect2 &p_rect, const Rect2 &p_src_rect, const Color &p_modulate = Color(1, 1, 1), bool p_transpose = false, const Ref<Texture> &p_normal_map = Ref<Texture>(), bool p_clip_uv = true) const;
+	bool get_rect_region(const Rect2 &p_rect, const Rect2 &p_src_rect, Rect2 &r_rect, Rect2 &r_src_rect) const;
+
+	void set_data(const Ref<Image> &p_image);
+	Ref<Image> get_data() const;
+
+	PackerImageResource();
+	~PackerImageResource();
 
 protected:
 	static void _bind_methods();
