@@ -2,7 +2,7 @@
 
 This is a texture packer engine module, for the Godot Engine.
 
-Internally it uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/rectpack2D)
+Internally it uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/rectpack2D/tree/legacy)
 
 # Building
 
