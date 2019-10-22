@@ -33,6 +33,8 @@ String PackerImageResourceImporter::get_preset_name(int p_idx) const {
 }
 
 void PackerImageResourceImporter::get_import_options(List<ImportOption> *r_options, int p_preset) const {
+	r_options->push_back(ImportOption(PropertyInfo(Variant::BOOL, "hdr_as_srgb"), false));
+	r_options->push_back(ImportOption(PropertyInfo(Variant::REAL, "scale"), 1.0));
 }
 
 bool PackerImageResourceImporter::get_option_visibility(const String &p_option, const Map<StringName, Variant> &p_options) const {
@@ -40,17 +42,24 @@ bool PackerImageResourceImporter::get_option_visibility(const String &p_option, 
 }
 
 Error PackerImageResourceImporter::import(const String &p_source_file, const String &p_save_path, const Map<StringName, Variant> &p_options, List<String> *r_platform_variants, List<String> *r_gen_files, Variant *r_metadata) {
+	bool hdr_as_srgb = p_options["hdr_as_srgb"];
+	float scale = p_options["scale"];
 
-	/*
 	Ref<Image> image;
 	image.instance();
 	Error err = ImageLoader::load_image(p_source_file, image, NULL, hdr_as_srgb, scale);
 
 	if (err != OK)
 		return err;
-		*/
 
-	return Error::FAILED;
+	Ref<PackerImageResource> res;
+	res.instance();
+
+	res->set_data(image);
+
+	return ResourceSaver::save(p_save_path + "." + get_save_extension(), res);
+
+	return Error::ERR_PARSE_ERROR;
 }
 
 PackerImageResourceImporter::PackerImageResourceImporter() {

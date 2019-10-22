@@ -4,9 +4,12 @@
 
 #include "editor/import/editor_import_plugin.h"
 #include "core/ustring.h"
+#include "core/io/resource_saver.h"
 
 #include "core/image.h"
 #include "core/io/image_loader.h"
+
+#include "packer_image_resource.h"
 
 class PackerImageResourceImporter : public EditorImportPlugin {
 
@@ -30,6 +33,9 @@ public:
 
 	PackerImageResourceImporter();
 	~PackerImageResourceImporter();
+
+private:
+
 };
 
 #endif
