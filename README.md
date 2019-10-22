@@ -8,10 +8,14 @@ Internally it uses the legacy version of [rectpack2D](https://github.com/TeamHyp
 
 1. Get the source code for the Godot Engine.
 
+```
+git clone https://github.com/godotengine/godot.git godot
+```
+
 2. go into Godot's modules directory.
 
 ```
-cd godot/modules/
+cd ./godot/modules/
 ```
 
 3. clone this repository
