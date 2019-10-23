@@ -72,7 +72,7 @@ Vector<Variant> TextureMerger::get_textures() {
 void TextureMerger::set_textures(const Vector<Variant> &textures) {
 	bool texture_removed = false;
 	for (int i = 0; i < _textures.size(); ++i) {
-		if (_packer->unref_texture(_textures[i])) {
+		if (_packer->unref_texture(_textures.get(i))) {
 			texture_removed = true;
 		}
 	}
@@ -81,7 +81,7 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 	_textures.resize(textures.size());
 
 	for (int i = 0; i < textures.size(); i++) {
-		Ref<Texture> texture = Ref<Texture>(textures[i]);
+		Ref<Texture> texture = Ref<Texture>(textures.get(i));
 
 		_textures.set(i, texture);
 	}
@@ -91,10 +91,10 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 
 	bool texture_added = false;
 	for (int i = 0; i < _textures.size(); ++i) {
-		Ref<Texture> tex = _textures.get(i);
+		Ref<Texture> texture = _textures.get(i);
 
-		if (tex.is_valid() && !_packer->contains_texture(tex)) {
-			Ref<AtlasTexture> tex = _packer->add_texture(tex);
+		if (texture.is_valid() && !_packer->contains_texture(texture)) {
+			Ref<AtlasTexture> tex = _packer->add_texture(texture);
 
 			if (has_method("_texture_added"))
 				call("_texture_added", tex);

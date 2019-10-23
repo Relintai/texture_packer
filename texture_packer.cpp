@@ -36,6 +36,8 @@ void TexturePacker::set_margin(const int margin) {
 }
 
 Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
+	ERR_FAIL_COND_V(!texture.is_valid(), Ref<AtlasTexture>());
+
 	Ref<AtlasTexture> atlas_text = texture;
 
 	if (atlas_text.is_valid()) {
