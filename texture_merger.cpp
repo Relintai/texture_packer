@@ -96,11 +96,6 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 		if (texture.is_valid() && !_packer->contains_texture(texture)) {
 			Ref<AtlasTexture> tex = _packer->add_texture(texture);
 
-			if (has_method("_texture_added"))
-				call("_texture_added", tex);
-
-			emit_signal("texture_added", tex);
-
 			texture_added = true;
 		}
 	}
