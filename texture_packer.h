@@ -35,8 +35,8 @@ public:
 	Ref<Texture> get_original_texture(int index);
 	bool contains_texture(Ref<Texture> texture);
 
-	void unref_texture_index(int index);
-	void unref_texture(Ref<Texture> texture);
+	bool unref_texture_index(int index);
+	bool unref_texture(Ref<Texture> texture);
 	void remove_texture_index(int index);
 	void remove_texture(Ref<Texture> texture);
 

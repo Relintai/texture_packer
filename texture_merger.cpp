@@ -124,20 +124,48 @@ Ref<AtlasTexture> TextureMerger::get_texture(int index) {
 	return _packer->get_texture(index);
 }
 
-void TextureMerger::unref_texture_index(int index) {
-	_packer->unref_texture_index(index);
+bool TextureMerger::unref_texture_index(int index) {
+	if (_packer->unref_texture_index(index)) {
+		if (has_method("_texture_removed"))
+			call("_texture_removed");
+
+		emit_signal("texture_removed");
+
+		return true;
+	}
+
+	return false;
 }
 
-void TextureMerger::unref_texture(Ref<Texture> texture) {
-	_packer->unref_texture(texture);
+bool TextureMerger::unref_texture(Ref<Texture> texture) {
+	if (_packer->unref_texture(texture)) {
+		if (has_method("_texture_removed"))
+			call("_texture_removed");
+
+		emit_signal("texture_removed");
+
+		return true;
+	}
+
+	return false;
 }
 
 void TextureMerger::remove_texture_index(int index) {
 	_packer->remove_texture_index(index);
+
+	if (has_method("_texture_removed"))
+		call("_texture_removed");
+
+	emit_signal("texture_removed");
 }
 
 void TextureMerger::remove_texture(Ref<Texture> texture) {
 	_packer->remove_texture(texture);
+
+	if (has_method("_texture_removed"))
+		call("_texture_removed");
+
+	emit_signal("texture_removed");
 }
 
 int TextureMerger::get_texture_count() {
@@ -177,10 +205,12 @@ TextureMerger::~TextureMerger() {
 
 void TextureMerger::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("texture_merged"));
-	ADD_SIGNAL(MethodInfo("texture_added"));
+	ADD_SIGNAL(MethodInfo("texture_added", PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "AtlasTexture")));
+	ADD_SIGNAL(MethodInfo("texture_removed"));
 
 	BIND_VMETHOD(MethodInfo("_texture_merged"));
 	BIND_VMETHOD(MethodInfo("_texture_added", PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "AtlasTexture")));
+	BIND_VMETHOD(MethodInfo("_texture_removed"));
 
 	ClassDB::bind_method(D_METHOD("get_texture_flags"), &TextureMerger::get_texture_flags);
 	ClassDB::bind_method(D_METHOD("set_texture_flags", "flags"), &TextureMerger::set_texture_flags);

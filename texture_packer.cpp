@@ -148,8 +148,8 @@ bool TexturePacker::contains_texture(Ref<Texture> texture) {
 	return false;
 }
 
-void TexturePacker::unref_texture_index(int index) {
-	ERR_FAIL_INDEX(index, _rects.size());
+bool TexturePacker::unref_texture_index(int index) {
+	ERR_FAIL_INDEX_V(index, _rects.size(), false);
 
 	rect_xywhf *r = _rects.get(index);
 
@@ -158,14 +158,18 @@ void TexturePacker::unref_texture_index(int index) {
 	if (rc <= 0) {
 		_rects.remove(index);
 
-		r->atlas_texture.unref();
+		r->original_texture.unref();
 		r->atlas_texture.unref();
 
 		memdelete(r);
+
+		return true;
 	}
+
+	return false;
 }
 
-void TexturePacker::unref_texture(Ref<Texture> texture) {
+bool TexturePacker::unref_texture(Ref<Texture> texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
@@ -184,15 +188,19 @@ void TexturePacker::unref_texture(Ref<Texture> texture) {
 			if (rc <= 0) {
 				_rects.remove(i);
 
-				r->atlas_texture.unref();
+				r->original_texture.unref();
 				r->atlas_texture.unref();
 
 				memdelete(r);
+
+				return true;
 			}
 
-			return;
+			return false;
 		}
 	}
+
+	return false;
 }
 
 void TexturePacker::remove_texture_index(int index) {
@@ -200,7 +208,7 @@ void TexturePacker::remove_texture_index(int index) {
 
 	rect_xywhf *r = _rects.get(index);
 
-	r->atlas_texture.unref();
+	r->original_texture.unref();
 	r->atlas_texture.unref();
 
 	memdelete(r);
@@ -222,7 +230,7 @@ void TexturePacker::remove_texture(Ref<Texture> texture) {
 
 			_rects.remove(i);
 
-			r->atlas_texture.unref();
+			r->original_texture.unref();
 			r->atlas_texture.unref();
 
 			memdelete(r);
