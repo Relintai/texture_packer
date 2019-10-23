@@ -12,6 +12,9 @@ class TextureMerger : public Node {
 	GDCLASS(TextureMerger, Node);
 
 public:
+	bool get_dirty() const;
+	void set_dirty(const bool value);
+
 	int get_texture_flags() const;
 	void set_texture_flags(const int flags);
 
@@ -59,9 +62,11 @@ public:
 
 protected:
 	static void _bind_methods();
+	void _notification(int p_what);
 
 private:
 	bool _automatic_merge;
+	bool _dirty;
 
 	Ref<TexturePacker> _packer;
 	Vector<Ref<Texture> > _textures;

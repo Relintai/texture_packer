@@ -1,5 +1,18 @@
 #include "texture_merger.h"
 
+bool TextureMerger::get_dirty() const {
+	return _dirty;
+}
+void TextureMerger::set_dirty(const bool value) {
+	_dirty = value;
+
+	if (!_automatic_merge || Engine::get_singleton()->is_editor_hint())
+		return;
+
+	if (_dirty)
+		set_process(true);
+}
+
 int TextureMerger::get_texture_flags() const {
 	return _packer->get_texture_flags();
 }
@@ -57,8 +70,11 @@ Vector<Variant> TextureMerger::get_textures() {
 	return r;
 }
 void TextureMerger::set_textures(const Vector<Variant> &textures) {
+	bool texture_removed = false;
 	for (int i = 0; i < _textures.size(); ++i) {
-		_packer->unref_texture(_textures[i]);
+		if (_packer->unref_texture(_textures[i])) {
+			texture_removed = true;
+		}
 	}
 
 	_textures.clear();
@@ -89,8 +105,8 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 		}
 	}
 
-	if (texture_added && _automatic_merge)
-		merge();
+	if ((texture_added || texture_removed) && _automatic_merge)
+		set_dirty(true);
 }
 
 Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
@@ -107,6 +123,8 @@ Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
 			call("_texture_added", tex);
 
 		emit_signal("texture_added", tex);
+
+		set_dirty(true);
 	}
 
 	return tex;
@@ -131,6 +149,8 @@ bool TextureMerger::unref_texture_index(int index) {
 
 		emit_signal("texture_removed");
 
+		set_dirty(true);
+
 		return true;
 	}
 
@@ -143,6 +163,8 @@ bool TextureMerger::unref_texture(Ref<Texture> texture) {
 			call("_texture_removed");
 
 		emit_signal("texture_removed");
+
+		set_dirty(true);
 
 		return true;
 	}
@@ -157,6 +179,8 @@ void TextureMerger::remove_texture_index(int index) {
 		call("_texture_removed");
 
 	emit_signal("texture_removed");
+
+	set_dirty(true);
 }
 
 void TextureMerger::remove_texture(Ref<Texture> texture) {
@@ -166,6 +190,8 @@ void TextureMerger::remove_texture(Ref<Texture> texture) {
 		call("_texture_removed");
 
 	emit_signal("texture_removed");
+
+	set_dirty(true);
 }
 
 int TextureMerger::get_texture_count() {
@@ -203,6 +229,25 @@ TextureMerger::~TextureMerger() {
 	_packer.unref();
 }
 
+void TextureMerger::_notification(int p_what) {
+	switch (p_what) {
+		case NOTIFICATION_PROCESS: {
+			if (!_automatic_merge || Engine::get_singleton()->is_editor_hint())
+				return;
+
+			set_process(false);
+
+			if (!_dirty)
+				return;
+			
+			_dirty = false;
+
+			merge();
+
+		} break;
+	}
+}
+
 void TextureMerger::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("texture_merged"));
 	ADD_SIGNAL(MethodInfo("texture_added", PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "AtlasTexture")));
@@ -211,6 +256,9 @@ void TextureMerger::_bind_methods() {
 	BIND_VMETHOD(MethodInfo("_texture_merged"));
 	BIND_VMETHOD(MethodInfo("_texture_added", PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "AtlasTexture")));
 	BIND_VMETHOD(MethodInfo("_texture_removed"));
+
+	ClassDB::bind_method(D_METHOD("get_dirty"), &TextureMerger::get_dirty);
+	ClassDB::bind_method(D_METHOD("set_dirty", "value"), &TextureMerger::set_dirty);
 
 	ClassDB::bind_method(D_METHOD("get_texture_flags"), &TextureMerger::get_texture_flags);
 	ClassDB::bind_method(D_METHOD("set_texture_flags", "flags"), &TextureMerger::set_texture_flags);
