@@ -151,10 +151,10 @@ void TextureMerger::merge() {
 }
 
 TextureMerger::TextureMerger() {
-	_automatic_merge = true;
+	_automatic_merge = false;
 
 	_packer.instance();
-	_packer->set_keep_original_atlases(true);
+	_packer->set_keep_original_atlases(false);
 }
 
 TextureMerger::~TextureMerger() {
