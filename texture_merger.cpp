@@ -57,6 +57,10 @@ Vector<Variant> TextureMerger::get_textures() {
 	return r;
 }
 void TextureMerger::set_textures(const Vector<Variant> &textures) {
+	for (int i = 0; i < _textures.size(); ++i) {
+		_packer->unref_texture(_textures[i]);
+	}
+
 	_textures.clear();
 	_textures.resize(textures.size());
 
