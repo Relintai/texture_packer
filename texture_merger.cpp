@@ -88,7 +88,14 @@ Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
 
 	_textures.push_back(texture);
 
-	return _packer->add_texture(texture);
+	Ref<AtlasTexture> tex = _packer->add_texture(texture);
+
+	if (has_method("_texture_added"))
+		call("_texture_added", tex);
+
+	emit_signal("texture_added", tex);
+
+	return tex;
 }
 
 Ref<Texture> TextureMerger::get_original_texture(int index) {
@@ -137,6 +144,9 @@ int TextureMerger::get_generated_texture_count() {
 void TextureMerger::merge() {
 	_packer->merge();
 
+	if (has_method("_texture_merged"))
+		call("_texture_merged");
+
 	emit_signal("texture_merged");
 }
 
@@ -153,6 +163,10 @@ TextureMerger::~TextureMerger() {
 
 void TextureMerger::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("texture_merged"));
+	ADD_SIGNAL(MethodInfo("texture_added"));
+
+	BIND_VMETHOD(MethodInfo("_texture_merged"));
+	BIND_VMETHOD(MethodInfo("_texture_added", PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "AtlasTexture")));
 
 	ClassDB::bind_method(D_METHOD("get_texture_flags"), &TextureMerger::get_texture_flags);
 	ClassDB::bind_method(D_METHOD("set_texture_flags", "flags"), &TextureMerger::set_texture_flags);
