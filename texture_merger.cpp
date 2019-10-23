@@ -78,7 +78,13 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 		Ref<Texture> tex = _textures.get(i);
 
 		if (tex.is_valid() && !_packer->contains_texture(tex)) {
-			_packer->add_texture(tex);
+			Ref<AtlasTexture> tex = _packer->add_texture(tex);
+
+			if (has_method("_texture_added"))
+				call("_texture_added", tex);
+
+			emit_signal("texture_added", tex);
+
 			texture_added = true;
 		}
 	}
@@ -92,12 +98,16 @@ Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
 
 	_textures.push_back(texture);
 
+	bool contains = _packer->contains_texture(texture);
+
 	Ref<AtlasTexture> tex = _packer->add_texture(texture);
 
-	if (has_method("_texture_added"))
-		call("_texture_added", tex);
+	if (!contains) {
+		if (has_method("_texture_added"))
+			call("_texture_added", tex);
 
-	emit_signal("texture_added", tex);
+		emit_signal("texture_added", tex);
+	}
 
 	return tex;
 }
