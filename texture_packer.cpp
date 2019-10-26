@@ -339,11 +339,13 @@ void TexturePacker::merge() {
 					int orig_img_indx = (rect_pos_y + y) * img_width * input_format_offset + rect_pos_x * input_format_offset;
 					int start_indx = (r->y + y + _margin) * b.size.w * 4 + (r->x + _margin) * 4;
 
-					int row_width = (r->w - 2 * _margin) * input_format_offset;
-					for (int x = 0; x < row_width; x += 4) {
+					int row_width = (r->w - 2 * _margin);
+					for (int x = 0; x < row_width; ++x) {
 
-						for (int sx = 0; sx < 4; ++sx) {
-							data.set(start_indx + x + sx, image_data[orig_img_indx + sx + x]);
+
+
+						for (int sx = 0; sx < input_format_offset; ++sx) {
+							data.set(start_indx + (x * 4) + sx, image_data[orig_img_indx + sx + (x * input_format_offset)]);
 						}
 					}
 				}
