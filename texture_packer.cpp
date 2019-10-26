@@ -330,14 +330,21 @@ void TexturePacker::merge() {
 
 				PoolByteArray image_data = img->get_data();
 
+				int input_format_offset = get_offset_for_format(img->get_format());
+
+				ERR_CONTINUE_MSG(input_format_offset == 0, "Format is not implemented, Skipping!")
+
 				int h_wo_margin = r->h - 2 * _margin;
 				for (int y = 0; y < h_wo_margin; ++y) {
-					int orig_img_indx = (rect_pos_y + y) * img_width * 4 + rect_pos_x * 4;
+					int orig_img_indx = (rect_pos_y + y) * img_width * input_format_offset + rect_pos_x * input_format_offset;
 					int start_indx = (r->y + y + _margin) * b.size.w * 4 + (r->x + _margin) * 4;
 
-					int row_width = (r->w - 2 * _margin) * 4;
-					for (int x = 0; x < row_width; ++x) {
-						data.set(start_indx + x, image_data[orig_img_indx + x]);
+					int row_width = (r->w - 2 * _margin) * input_format_offset;
+					for (int x = 0; x < row_width; x += 4) {
+
+						for (int sx = 0; sx < 4; ++sx) {
+							data.set(start_indx + x + sx, image_data[orig_img_indx + sx + x]);
+						}
 					}
 				}
 			}
@@ -362,6 +369,17 @@ void TexturePacker::merge() {
 			}
 		}
 	}
+}
+
+int TexturePacker::get_offset_for_format(Image::Format format) {
+	switch (format) {
+		case Image::FORMAT_RGB8:
+			return 3;
+		case Image::FORMAT_RGBA8:
+			return 4;
+	}
+
+	return 0;
 }
 
 TexturePacker::TexturePacker() {

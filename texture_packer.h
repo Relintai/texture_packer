@@ -48,6 +48,8 @@ public:
 
 	void merge();
 
+	int get_offset_for_format(Image::Format format);
+
 	TexturePacker();
 	~TexturePacker();
 
