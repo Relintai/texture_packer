@@ -2,7 +2,9 @@
 
 This is a texture packer engine module, for the Godot Engine.
 
-Internally it uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/rectpack2D/tree/legacy)
+It can create texture atlases for you even in the running game.
+
+It uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/rectpack2D/tree/legacy)
 
 It *should* work on all platforms.
 
@@ -40,12 +42,12 @@ Supports filters, custom background color, margins.
 
 ### The keep_original_atlases option:
 
-If you set this to true, and then add AtlasTexture(s), TexturePacker will change these ones (the ones you actually added) 
+If you set this to true, and then add AtlasTextures, TexturePacker will change these ones (the ones you actually added) 
 after the bake.
 
 You can use this to bake gui textures together, without changing the resources everywhere at runtime.
 Think of rpgs, when you have a huge number of potential icons that the player can put on his or her actionbars.
-You can look look at Tales of Maj'Eyal or pretty much every actually complex MMORPGs as an example.
+You can take look at Tales of Maj'Eyal or pretty much every actually complex MMORPGs as an example.
 
 Note: Doing something like this in only recommended, if you can't pre-make the atlases (or it's really unfeasible), you are better off 
 making the atlases yourself during development.
