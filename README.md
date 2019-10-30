@@ -67,3 +67,28 @@ Useful for textures you only need for baking, as this class will not register it
 The module also contains an editor plugin which can import textures as `PackerImageResource` Resource.
 
 To access it, click on a texture, switch to the import tab, and in the "Import As" Dropdown, select "Packer Image Recource".
+
+## TextureLayerMerger
+
+This class can merge together textures as layers. Useful for example to merge together (and color) skin, and clothes for a character.
+
+It can handle both AtlasTextures and normal Textures.
+
+Add the layers from bottom to top with the add_texture() method, when you added everything call merge().
+
+You can set the resulting image's size with the `width`, and `height` properties. If you leave them at 0, they will
+change to the first added texture's size.
+
+add_texture looks like this:
+
+``` 
+void add_texture(Ref<Texture> p_texture, Color p_color = Color(1, 1, 1, 1), Vector2 p_position = Vector2(), Rect2 p_rect = Rect2());
+```
+
+The color parameter will color the given texture on merge().
+With the position parameter you can offset your texture (in the resulted texture), and with the rect parameter, you can crop it.
+
+There are setters to manipulate the added data later.
+
+After the merge, you can either use `get_result_as_texture()` (it creates an ImageTexture on the fly), or the `data` property to 
+grab the resulting Image.

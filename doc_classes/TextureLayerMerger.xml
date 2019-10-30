@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="TextureLayerMerger" inherits="Reference" category="Addon" version="3.2">
+	<brief_description>
+		A class, that can merge textures as layers together.
+	</brief_description>
+		A class, that can merge textures as layers together.
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_texture">
+			<return type="AtlasTexture">
+			</return>
+			<argument index="0" name="texture" type="Texture">
+			</argument>
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="texture_flags" type="int" setter="set_texture_flags" getter="get_texture_flags" default="5">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

@@ -12,3 +12,5 @@ env.add_source_files(env.modules_sources,"texture_resource/packer_image_resource
 env.add_source_files(env.modules_sources,"texture_resource/editor_plugin_packer_image_resource.cpp")
 env.add_source_files(env.modules_sources,"texture_resource/packer_image_resource_importer.cpp")
 
+env.add_source_files(env.modules_sources,"layers/texture_layer_merger.cpp")
+
