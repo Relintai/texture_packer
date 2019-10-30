@@ -67,11 +67,26 @@ void TextureLayerMerger::add_texture(Ref<Texture> p_texture, Color p_color, Vect
 
 	entry.rect = p_rect;
 
-	if (_width == 0)
-		_width = p_texture->get_width();
+	if (_width == 0 || _height == 0) {
+		Ref<AtlasTexture> at = p_texture;
 
-	if (_height == 0)
-		_height = p_texture->get_height();
+		int w = 0;
+		int h = 0;
+
+		if (at.is_valid()) {
+			w = at->get_region().size.x;
+			h = at->get_region().size.y;
+		} else {
+			w = p_texture->get_width();
+			h = p_texture->get_height();
+		}
+
+		if (_width == 0)
+			_width = w;
+
+		if (_height == 0)
+			_height = h;
+	}
 
 	_entries.push_back(entry);
 }
