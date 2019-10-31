@@ -161,7 +161,7 @@ void TextureLayerMerger::merge() {
 	write_base_color_to_array(data);
 
 	for (int i = 0; i < _entries.size(); ++i) {
-		LayerMergerEntry &e = _entries.get(i);
+		const LayerMergerEntry &e = _entries[i];
 
 		ERR_CONTINUE(!e.texture.is_valid());
 
@@ -212,7 +212,7 @@ void TextureLayerMerger::merge() {
 		int iih = input_image->get_height();
 		PoolVector<uint8_t> input_image_data = input_image->get_data();
 
-		Color &blendcolor = e.color;
+		const Color &blendcolor = e.color;
 
 		float blend_arr[] = {
 			blendcolor.r,
