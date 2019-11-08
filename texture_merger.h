@@ -40,7 +40,8 @@ public:
 	void set_textures(const Vector<Variant> &textures);
 
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
-	Ref<AtlasTexture> get_texture(int index);
+	Ref<AtlasTexture> get_texture(Ref<Texture> texture);
+	Ref<AtlasTexture> get_texture_index(int index);
 	Ref<Texture> get_original_texture(int index);
 	bool contains_texture(Ref<Texture> texture);
 

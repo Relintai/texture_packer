@@ -31,9 +31,13 @@ public:
 	void set_margin(const int margin);
 
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
-	Ref<AtlasTexture> get_texture(int index);
+    
+	Ref<AtlasTexture> get_texture(Ref<Texture> texture);
+	Ref<AtlasTexture> get_texture_index(int index);
+	
 	Ref<Texture> get_original_texture(int index);
-	bool contains_texture(Ref<Texture> texture);
+	
+    bool contains_texture(Ref<Texture> texture);
 
 	bool unref_texture_index(int index);
 	bool unref_texture(Ref<Texture> texture);

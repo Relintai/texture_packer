@@ -133,8 +133,12 @@ bool TextureMerger::contains_texture(Ref<Texture> texture) {
 	return _packer->contains_texture(texture);
 }
 
-Ref<AtlasTexture> TextureMerger::get_texture(int index) {
-	return _packer->get_texture(index);
+Ref<AtlasTexture> TextureMerger::get_texture(Ref<Texture> texture) {
+	return _packer->get_texture(texture);
+}
+
+Ref<AtlasTexture> TextureMerger::get_texture_index(int index) {
+	return _packer->get_texture_index(index);
 }
 
 bool TextureMerger::unref_texture_index(int index) {
@@ -287,7 +291,8 @@ void TextureMerger::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_packer", "packer"), &TextureMerger::set_packer);
 
 	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TextureMerger::add_texture);
-	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TextureMerger::get_texture);
+	ClassDB::bind_method(D_METHOD("get_texture", "texture"), &TextureMerger::get_texture);
+	ClassDB::bind_method(D_METHOD("get_texture_index", "index"), &TextureMerger::get_texture_index);
 	ClassDB::bind_method(D_METHOD("get_original_texture", "index"), &TextureMerger::get_original_texture);
 
 	ClassDB::bind_method(D_METHOD("unref_texture_index", "index"), &TextureMerger::unref_texture_index);

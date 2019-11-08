@@ -118,16 +118,36 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 	return tex;
 }
 
+Ref<AtlasTexture> TexturePacker::get_texture(Ref<Texture> texture) {
+	for (int i = 0; i < _rects.size(); ++i) {
+		rect_xywhf *r = _rects.get(i);
+
+		Ref<Texture> t;
+		Ref<AtlasTexture> at = texture;
+
+		if (_keep_original_atlases && at.is_valid())
+			t = r->atlas_texture;
+		else
+			t = r->original_texture;
+
+		if (t == texture) {
+			return _rects.get(i)->atlas_texture;
+		}
+	}
+
+	return Ref<Texture>();
+}
+
+Ref<AtlasTexture> TexturePacker::get_texture_index(int index) {
+	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<AtlasTexture>());
+
+	return _rects.get(index)->atlas_texture;
+}
+
 Ref<Texture> TexturePacker::get_original_texture(int index) {
 	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<Texture>());
 
 	return _rects.get(index)->original_texture;
-}
-
-Ref<AtlasTexture> TexturePacker::get_texture(int index) {
-	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<AtlasTexture>());
-
-	return _rects.get(index)->atlas_texture;
 }
 
 bool TexturePacker::contains_texture(Ref<Texture> texture) {
@@ -417,7 +437,10 @@ void TexturePacker::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "margin"), "set_margin", "get_margin");
 
 	ClassDB::bind_method(D_METHOD("add_texture", "texture"), &TexturePacker::add_texture);
-	ClassDB::bind_method(D_METHOD("get_texture", "index"), &TexturePacker::get_texture);
+
+	ClassDB::bind_method(D_METHOD("get_texture", "texture"), &TexturePacker::get_texture);
+	ClassDB::bind_method(D_METHOD("get_texture_index", "index"), &TexturePacker::get_texture_index);
+
 	ClassDB::bind_method(D_METHOD("get_original_texture", "index"), &TexturePacker::get_original_texture);
 
 	ClassDB::bind_method(D_METHOD("unref_texture_index", "index"), &TexturePacker::unref_texture_index);
