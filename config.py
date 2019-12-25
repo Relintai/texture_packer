@@ -8,6 +8,8 @@ def get_doc_classes():
     return [
         "TextureMerger",
         "TexturePacker",
+        "TextureLayerMerger",
+        "PackerImageResource",
     ]
 
 def get_doc_path():
