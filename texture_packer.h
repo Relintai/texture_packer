@@ -1,9 +1,9 @@
 #ifndef TEXTURE_PACKER_H
 #define TEXTURE_PACKER_H
 
-#include "core/reference.h"
-#include "core/image.h"
 #include "core/color.h"
+#include "core/image.h"
+#include "core/reference.h"
 #include "core/ustring.h"
 #include "core/vector.h"
 #include "scene/resources/texture.h"
@@ -31,13 +31,13 @@ public:
 	void set_margin(const int margin);
 
 	Ref<AtlasTexture> add_texture(Ref<Texture> texture);
-    
+
 	Ref<AtlasTexture> get_texture(Ref<Texture> texture);
 	Ref<AtlasTexture> get_texture_index(int index);
-	
+
 	Ref<Texture> get_original_texture(int index);
-	
-    bool contains_texture(Ref<Texture> texture);
+
+	bool contains_texture(Ref<Texture> texture);
 
 	bool unref_texture_index(int index);
 	bool unref_texture(Ref<Texture> texture);

@@ -3,9 +3,9 @@
 
 #include "core/reference.h"
 
+#include "core/image.h"
 #include "core/math/rect2.h"
 #include "core/vector.h"
-#include "core/image.h"
 #include "scene/resources/texture.h"
 
 class TextureLayerMerger : public Reference {
@@ -24,7 +24,7 @@ public:
 
 	Color get_base_color() const;
 	void set_base_color(const Color p_color);
-	
+
 	Ref<Image> get_data() const;
 	void set_data(const Ref<Image> &p_image);
 

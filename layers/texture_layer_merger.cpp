@@ -59,9 +59,9 @@ void TextureLayerMerger::add_texture(Ref<Texture> p_texture, Color p_color, Vect
 	entry.color = p_color;
 	entry.position = p_position;
 
-	if (p_rect.size.x <= 0) 
+	if (p_rect.size.x <= 0)
 		p_rect.size.x = p_texture->get_width();
-	
+
 	if (p_rect.size.y <= 0)
 		p_rect.size.y = p_texture->get_height();
 

@@ -2,9 +2,9 @@
 #ifndef EDITOR_IMPORT_COLLADA_MDR
 #define EDITOR_IMPORT_COLLADA_MDR
 
-#include "editor/import/editor_import_plugin.h"
-#include "core/ustring.h"
 #include "core/io/resource_saver.h"
+#include "core/ustring.h"
+#include "editor/import/editor_import_plugin.h"
 
 #include "core/image.h"
 #include "core/io/image_loader.h"
@@ -35,7 +35,6 @@ public:
 	~PackerImageResourceImporter();
 
 private:
-
 };
 
 #endif

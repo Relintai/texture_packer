@@ -362,8 +362,6 @@ void TexturePacker::merge() {
 					int row_width = (r->w - 2 * _margin);
 					for (int x = 0; x < row_width; ++x) {
 
-
-
 						for (int sx = 0; sx < input_format_offset; ++sx) {
 							data.set(start_indx + (x * 4) + sx, image_data[orig_img_indx + sx + (x * input_format_offset)]);
 						}

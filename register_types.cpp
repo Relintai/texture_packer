@@ -1,7 +1,7 @@
 #include "register_types.h"
 
-#include "texture_packer.h"
 #include "texture_merger.h"
+#include "texture_packer.h"
 
 #include "texture_resource/packer_image_resource.h"
 
@@ -21,12 +21,10 @@ void register_texture_packer_types() {
 
 	ClassDB::register_class<TextureLayerMerger>();
 
-	#ifdef TOOLS_ENABLED
+#ifdef TOOLS_ENABLED
 	EditorPlugins::add_by_type<EditorPluginPackerImageResource>();
-	#endif
-}	
-
-void unregister_texture_packer_types() {
-
+#endif
 }
 
+void unregister_texture_packer_types() {
+}

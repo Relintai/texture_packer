@@ -2,8 +2,8 @@
 #ifndef EDITOR_PLUGIN_PACKER_IMAGE_RESOURCE_H
 #define EDITOR_PLUGIN_PACKER_IMAGE_RESOURCE_H
 
-#include "editor/editor_plugin.h"
 #include "core/ustring.h"
+#include "editor/editor_plugin.h"
 
 #include "packer_image_resource_importer.h"
 

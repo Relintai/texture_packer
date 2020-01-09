@@ -238,7 +238,7 @@ void TextureMerger::_notification(int p_what) {
 
 			if (!_dirty)
 				return;
-			
+
 			_dirty = false;
 
 			merge();
