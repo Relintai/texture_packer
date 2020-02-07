@@ -374,7 +374,7 @@ void TexturePacker::merge() {
 
 				int input_format_offset = get_offset_for_format(img->get_format());
 
-				ERR_CONTINUE_MSG(input_format_offset == 0, "Format is not implemented, Skipping!")
+				ERR_CONTINUE_MSG(input_format_offset == 0, "Format is not implemented, Skipping!");
 
 				int h_wo_margin = r->h - 2 * _margin;
 				for (int y = 0; y < h_wo_margin; ++y) {
