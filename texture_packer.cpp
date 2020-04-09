@@ -398,11 +398,11 @@ void TexturePacker::merge() {
 			Ref<ImageTexture> texture;
 			texture.instance();
 
-			#if VERSION_MAJOR < 4
+#if VERSION_MAJOR < 4
 			texture->create_from_image(image, _texture_flags);
-			#else
+#else
 			texture->create_from_image(image);
-			#endif
+#endif
 
 			_generated_textures.set(i, texture);
 
@@ -430,7 +430,6 @@ int TexturePacker::get_offset_for_format(Image::Format format) {
 		case Image::FORMAT_R8:
 		case Image::FORMAT_RG8:
 		case Image::FORMAT_RGBA4444:
-		case Image::FORMAT_RGB565:
 		case Image::FORMAT_RF:
 		case Image::FORMAT_RGF:
 		case Image::FORMAT_RGBF:
@@ -460,8 +459,13 @@ int TexturePacker::get_offset_for_format(Image::Format format) {
 		case Image::FORMAT_ETC2_RGB8:
 		case Image::FORMAT_ETC2_RGBA8:
 		case Image::FORMAT_ETC2_RGB8A1:
+#if VERSION_MAJOR >= 4
+		case Image::FORMAT_RGB565:
 		case Image::FORMAT_ETC2_RA_AS_RG:
 		case Image::FORMAT_DXT5_RA_AS_RG:
+#else
+		case Image::FORMAT_RGBA5551:
+#endif
 		case Image::FORMAT_MAX:
 			return 0;
 	}
@@ -470,12 +474,12 @@ int TexturePacker::get_offset_for_format(Image::Format format) {
 }
 
 TexturePacker::TexturePacker() {
-	#if VERSION_MAJOR < 4
+#if VERSION_MAJOR < 4
 	_texture_flags = Texture::FLAG_MIPMAPS | Texture::FLAG_FILTER;
-	#else
+#else
 	_texture_flags = 0;
-	#endif
-	
+#endif
+
 	_max_atlas_size = 1024;
 	_keep_original_atlases = false;
 	_margin = 0;
