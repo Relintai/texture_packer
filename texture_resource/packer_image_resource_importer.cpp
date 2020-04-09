@@ -22,6 +22,12 @@ SOFTWARE.
 
 #include "packer_image_resource_importer.h"
 
+#include "core/version.h"
+
+#if VERSION_MAJOR >= 4
+#define REAL FLOAT
+#endif
+
 String PackerImageResourceImporter::get_importer_name() const {
 	return "packer_image_resource";
 }

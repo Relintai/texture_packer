@@ -33,6 +33,16 @@ SOFTWARE.
 
 #include "rectpack2D/pack.h"
 
+#include "core/version.h"
+
+#if VERSION_MAJOR >= 4
+#define PoolVector Vector
+#define Texture Texture2D
+#define PoolByteArray PackedByteArray
+
+#define REAL FLOAT
+#endif
+
 class TexturePacker : public Reference {
 	GDCLASS(TexturePacker, Reference);
 

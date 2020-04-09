@@ -324,7 +324,7 @@ void TexturePacker::merge() {
 
 		_generated_textures.resize(bins.size());
 
-		for (int i = 0; i < bins.size(); ++i) {
+		for (uint32_t i = 0; i < bins.size(); ++i) {
 			bin b = bins[i];
 
 			PoolByteArray data;
@@ -344,7 +344,7 @@ void TexturePacker::merge() {
 			}
 
 			//Process rects
-			for (int j = 0; j < b.rects.size(); ++j) {
+			for (uint32_t j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
 
 				Ref<Texture> otext = r->original_texture;
@@ -397,11 +397,16 @@ void TexturePacker::merge() {
 
 			Ref<ImageTexture> texture;
 			texture.instance();
+
+			#if VERSION_MAJOR < 4
 			texture->create_from_image(image, _texture_flags);
+			#else
+			texture->create_from_image(image);
+			#endif
 
 			_generated_textures.set(i, texture);
 
-			for (int j = 0; j < b.rects.size(); ++j) {
+			for (uint32_t j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
 
 				Ref<AtlasTexture> at = r->atlas_texture;
@@ -419,13 +424,58 @@ int TexturePacker::get_offset_for_format(Image::Format format) {
 			return 3;
 		case Image::FORMAT_RGBA8:
 			return 4;
+
+		case Image::FORMAT_L8:
+		case Image::FORMAT_LA8:
+		case Image::FORMAT_R8:
+		case Image::FORMAT_RG8:
+		case Image::FORMAT_RGBA4444:
+		case Image::FORMAT_RGB565:
+		case Image::FORMAT_RF:
+		case Image::FORMAT_RGF:
+		case Image::FORMAT_RGBF:
+		case Image::FORMAT_RGBAF:
+		case Image::FORMAT_RH:
+		case Image::FORMAT_RGH:
+		case Image::FORMAT_RGBH:
+		case Image::FORMAT_RGBAH:
+		case Image::FORMAT_RGBE9995:
+		case Image::FORMAT_DXT1:
+		case Image::FORMAT_DXT3:
+		case Image::FORMAT_DXT5:
+		case Image::FORMAT_RGTC_R:
+		case Image::FORMAT_RGTC_RG:
+		case Image::FORMAT_BPTC_RGBA:
+		case Image::FORMAT_BPTC_RGBF:
+		case Image::FORMAT_BPTC_RGBFU:
+		case Image::FORMAT_PVRTC2:
+		case Image::FORMAT_PVRTC2A:
+		case Image::FORMAT_PVRTC4:
+		case Image::FORMAT_PVRTC4A:
+		case Image::FORMAT_ETC:
+		case Image::FORMAT_ETC2_R11:
+		case Image::FORMAT_ETC2_R11S:
+		case Image::FORMAT_ETC2_RG11:
+		case Image::FORMAT_ETC2_RG11S:
+		case Image::FORMAT_ETC2_RGB8:
+		case Image::FORMAT_ETC2_RGBA8:
+		case Image::FORMAT_ETC2_RGB8A1:
+		case Image::FORMAT_ETC2_RA_AS_RG:
+		case Image::FORMAT_DXT5_RA_AS_RG:
+		case Image::FORMAT_MAX:
+			return 0;
 	}
 
 	return 0;
 }
 
 TexturePacker::TexturePacker() {
+	#if VERSION_MAJOR < 4
 	_texture_flags = Texture::FLAG_MIPMAPS | Texture::FLAG_FILTER;
+	#else
+	_texture_flags = 0;
+	#endif
+	
 	_max_atlas_size = 1024;
 	_keep_original_atlases = false;
 	_margin = 0;

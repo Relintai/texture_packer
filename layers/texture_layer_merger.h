@@ -30,6 +30,13 @@ SOFTWARE.
 #include "core/vector.h"
 #include "scene/resources/texture.h"
 
+#include "core/version.h"
+
+#if VERSION_MAJOR >= 4
+#define PoolVector Vector
+#define Texture Texture2D
+#endif
+
 class TextureLayerMerger : public Reference {
 
 	GDCLASS(TextureLayerMerger, Reference);
