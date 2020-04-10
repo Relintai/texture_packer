@@ -311,11 +311,11 @@ void TextureLayerMerger::merge() {
 		}
 	}
 
-	#if VERSION_MAJOR < 4
+#if VERSION_MAJOR < 4
 	_image->create(_width, _height, (_texture_flags & Texture::FLAG_MIPMAPS) != 0, Image::FORMAT_RGBA8, data);
-	#else
+#else
 	_image->create(_width, _height, true, Image::FORMAT_RGBA8, data);
-	#endif
+#endif
 }
 
 void TextureLayerMerger::write_base_color_to_array(PoolVector<uint8_t> &data) {

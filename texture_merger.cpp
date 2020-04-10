@@ -87,11 +87,11 @@ void TextureMerger::set_packer(const Ref<TexturePacker> packer) {
 Vector<Variant> TextureMerger::get_textures() {
 	Vector<Variant> r;
 	for (int i = 0; i < _textures.size(); i++) {
-		#if VERSION_MAJOR < 4
+#if VERSION_MAJOR < 4
 		r.push_back(_textures[i].get_ref_ptr());
-		#else
+#else
 		r.push_back(_textures[i]);
-		#endif
+#endif
 	}
 	return r;
 }
