@@ -27,7 +27,6 @@ SOFTWARE.
 #include "scene/resources/texture.h"
 
 class PackerImageResource : public Texture {
-
 	GDCLASS(PackerImageResource, Texture);
 
 	RES_BASE_EXTENSION("restex");
