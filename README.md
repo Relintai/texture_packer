@@ -6,15 +6,21 @@ It can create texture atlases for you even in the running game.
 
 It uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/rectpack2D/tree/legacy)
 
-It *should* work on all platforms.
+It should work on all platforms.
+
+It supports both godot 3.2 and 4.0 (master). Note that since 4.0 is still in very early stages I only 
+check whether it works from time to time.
 
 # Building
 
-1. Get the source code for the Godot Engine.
+1. Get the source code for the engine.
 
-```
-git clone https://github.com/godotengine/godot.git godot
-```
+If you want Godot 3.2:
+```git clone -b 3.2 https://github.com/godotengine/godot.git godot```
+
+If you want Godot 4.0:
+```git clone https://github.com/godotengine/godot.git godot```
+
 
 2. Go into Godot's modules directory.
 
