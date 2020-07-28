@@ -11,6 +11,11 @@ It should work on all platforms.
 It supports both godot 3.2 and 4.0 (master). Note that since 4.0 is still in very early stages I only 
 check whether it works from time to time.
 
+# Pre-built binaries
+
+You can grab a pre-built editor binary from the [Broken Seals](https://github.com/Relintai/broken_seals/releases) 
+repo, should you want to. It contains all my modules.
+
 # Building
 
 1. Get the source code for the engine.
