@@ -23,11 +23,19 @@ SOFTWARE.
 #ifndef PACKER_IMAGE_RESOURCE_H
 #define PACKER_IMAGE_RESOURCE_H
 
-#include "core/io/resource_saver.h"
+#include "core/version.h"
+
+#if VERSION_MAJOR > 3
+#include "core/string/ustring.h"
+#include "core/io/image.h"
+#else
 #include "core/ustring.h"
+#include "core/image.h"
+#endif
+
+#include "core/io/resource_saver.h"
 #include "editor/import/editor_import_plugin.h"
 
-#include "core/image.h"
 #include "core/io/image_loader.h"
 
 #include "packer_image_resource.h"

@@ -23,11 +23,19 @@ SOFTWARE.
 #ifndef TEXTURE_LAYER_MERGER_H
 #define TEXTURE_LAYER_MERGER_H
 
-#include "core/reference.h"
+#include "core/version.h"
 
-#include "core/image.h"
-#include "core/math/rect2.h"
+#if VERSION_MAJOR > 3
+#include "core/object/reference.h"
+#include "core/templates/vector.h"
+#include "core/io/image.h"
+#else
+#include "core/reference.h"
 #include "core/vector.h"
+#include "core/image.h"
+#endif
+
+#include "core/math/rect2.h"
 #include "scene/resources/texture.h"
 
 #include "core/version.h"

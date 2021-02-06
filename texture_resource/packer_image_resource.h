@@ -23,7 +23,14 @@ SOFTWARE.
 #ifndef PACKER_IMAGE_REOURCE_H
 #define PACKER_IMAGE_REOURCE_H
 
+#include "core/version.h"
+
+#if VERSION_MAJOR > 3
+#include "core/io/image.h"
+#else
 #include "core/image.h"
+#endif
+
 #include "scene/resources/texture.h"
 
 class PackerImageResource : public Texture {

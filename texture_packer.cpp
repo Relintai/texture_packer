@@ -447,10 +447,17 @@ int TexturePacker::get_offset_for_format(Image::Format format) {
 		case Image::FORMAT_BPTC_RGBA:
 		case Image::FORMAT_BPTC_RGBF:
 		case Image::FORMAT_BPTC_RGBFU:
+#if VERSION_MAJOR <= 3
 		case Image::FORMAT_PVRTC2:
 		case Image::FORMAT_PVRTC2A:
 		case Image::FORMAT_PVRTC4:
 		case Image::FORMAT_PVRTC4A:
+#else
+		case Image::FORMAT_PVRTC1_2:
+		case Image::FORMAT_PVRTC1_2A:
+		case Image::FORMAT_PVRTC1_4:
+		case Image::FORMAT_PVRTC1_4A:
+#endif
 		case Image::FORMAT_ETC:
 		case Image::FORMAT_ETC2_R11:
 		case Image::FORMAT_ETC2_R11S:

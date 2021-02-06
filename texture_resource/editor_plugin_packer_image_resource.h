@@ -23,7 +23,14 @@ SOFTWARE.
 #ifndef EDITOR_PLUGIN_PACKER_IMAGE_RESOURCE_H
 #define EDITOR_PLUGIN_PACKER_IMAGE_RESOURCE_H
 
+#include "core/version.h"
+
+#if VERSION_MAJOR > 3
+#include "core/string/ustring.h"
+#else
 #include "core/ustring.h"
+#endif
+
 #include "editor/editor_plugin.h"
 
 #include "packer_image_resource_importer.h"

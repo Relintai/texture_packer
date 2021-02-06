@@ -23,17 +23,26 @@ SOFTWARE.
 #ifndef TEXTURE_PACKER_H
 #define TEXTURE_PACKER_H
 
-#include "core/color.h"
+#include "core/version.h"
+
+#if VERSION_MAJOR > 3
+#include "core/io/image.h"
+#include "core/object/reference.h"
+#include "core/templates/vector.h"
+#include "core/string/ustring.h"
+#include "core/math/color.h"
+#else
 #include "core/image.h"
 #include "core/reference.h"
-#include "core/ustring.h"
 #include "core/vector.h"
+#include "core/ustring.h"
+#include "core/color.h"
+#endif
+
 #include "scene/resources/texture.h"
 #include <vector>
 
 #include "rectpack2D/pack.h"
-
-#include "core/version.h"
 
 #if VERSION_MAJOR >= 4
 #define PoolVector Vector

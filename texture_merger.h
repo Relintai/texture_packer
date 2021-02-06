@@ -23,10 +23,17 @@ SOFTWARE.
 #ifndef TEXTURE_MERGER_H
 #define TEXTURE_MERGER_H
 
-#include "scene/main/node.h"
+#include "core/version.h"
 
-#include "core/engine.h"
+#if VERSION_MAJOR > 3
+#include "core/templates/vector.h"
+#include "core/config/engine.h"
+#else
 #include "core/vector.h"
+#include "core/engine.h"
+#endif
+
+#include "scene/main/node.h"
 
 #include "texture_packer.h"
 
