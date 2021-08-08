@@ -48,7 +48,7 @@ void TextureLayerMerger::set_texture_flags(uint32_t p_flags) {
 Color TextureLayerMerger::get_base_color() const {
 	return _base_color;
 }
-void TextureLayerMerger::set_base_color(const Color p_color) {
+void TextureLayerMerger::set_base_color(const Color &p_color) {
 	_base_color = p_color;
 }
 
@@ -72,7 +72,7 @@ Ref<ImageTexture> TextureLayerMerger::get_result_as_texture() const {
 	return tex;
 }
 
-void TextureLayerMerger::add_texture(Ref<Texture> p_texture, Color p_color, Vector2 p_position, Rect2 p_rect) {
+void TextureLayerMerger::add_texture(const Ref<Texture> &p_texture, const Color &p_color, const Vector2 &p_position, Rect2 p_rect) {
 	ERR_FAIL_COND(!p_texture.is_valid());
 
 	LayerMergerEntry entry;
@@ -118,7 +118,7 @@ Ref<Texture> TextureLayerMerger::get_texture(const int p_index) {
 
 	return _entries.get(p_index).texture;
 }
-void TextureLayerMerger::set_texture(const int p_index, Ref<Texture> p_texture) {
+void TextureLayerMerger::set_texture(const int p_index, const Ref<Texture> &p_texture) {
 	ERR_FAIL_INDEX(p_index, _entries.size());
 
 	_entries.get(p_index).texture = p_texture;
@@ -129,7 +129,7 @@ Color TextureLayerMerger::get_color(const int p_index) {
 
 	return _entries.get(p_index).color;
 }
-void TextureLayerMerger::set_color(const int p_index, Color p_color) {
+void TextureLayerMerger::set_color(const int p_index, const Color &p_color) {
 	ERR_FAIL_INDEX(p_index, _entries.size());
 
 	_entries.get(p_index).color = p_color;
@@ -140,7 +140,7 @@ Vector2 TextureLayerMerger::get_position(const int p_index) {
 
 	return _entries.get(p_index).position;
 }
-void TextureLayerMerger::set_position(const int p_index, Vector2 p_position) {
+void TextureLayerMerger::set_position(const int p_index, const Vector2 &p_position) {
 	ERR_FAIL_INDEX(p_index, _entries.size());
 
 	_entries.get(p_index).position = p_position;
@@ -151,7 +151,7 @@ Rect2 TextureLayerMerger::get_rect(const int p_index) {
 
 	return _entries.get(p_index).rect;
 }
-void TextureLayerMerger::set_rect(const int p_index, Rect2 p_rect) {
+void TextureLayerMerger::set_rect(const int p_index, const Rect2 &p_rect) {
 	ERR_FAIL_INDEX(p_index, _entries.size());
 
 	_entries.get(p_index).rect = p_rect;

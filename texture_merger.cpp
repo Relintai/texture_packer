@@ -59,7 +59,7 @@ void TextureMerger::set_keep_original_atlases(const bool value) {
 Color TextureMerger::get_background_color() const {
 	return _packer->get_background_color();
 }
-void TextureMerger::set_background_color(const Color color) {
+void TextureMerger::set_background_color(const Color &color) {
 	_packer->set_background_color(color);
 }
 
@@ -80,7 +80,7 @@ void TextureMerger::set_automatic_merge(const bool value) {
 Ref<TexturePacker> TextureMerger::get_packer() const {
 	return _packer;
 }
-void TextureMerger::set_packer(const Ref<TexturePacker> packer) {
+void TextureMerger::set_packer(const Ref<TexturePacker> &packer) {
 	_packer = packer;
 }
 
@@ -130,7 +130,7 @@ void TextureMerger::set_textures(const Vector<Variant> &textures) {
 		set_dirty(true);
 }
 
-Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
+Ref<AtlasTexture> TextureMerger::add_texture(const Ref<Texture> &texture) {
 	ERR_FAIL_COND_V(!texture.is_valid(), Ref<AtlasTexture>());
 
 	_textures.push_back(texture);
@@ -151,23 +151,23 @@ Ref<AtlasTexture> TextureMerger::add_texture(Ref<Texture> texture) {
 	return tex;
 }
 
-Ref<Texture> TextureMerger::get_original_texture(int index) {
+Ref<Texture> TextureMerger::get_original_texture(const int index) {
 	return _packer->get_original_texture(index);
 }
 
-bool TextureMerger::contains_texture(Ref<Texture> texture) {
+bool TextureMerger::contains_texture(const Ref<Texture> &texture) {
 	return _packer->contains_texture(texture);
 }
 
-Ref<AtlasTexture> TextureMerger::get_texture(Ref<Texture> texture) {
+Ref<AtlasTexture> TextureMerger::get_texture(const Ref<Texture> &texture) {
 	return _packer->get_texture(texture);
 }
 
-Ref<AtlasTexture> TextureMerger::get_texture_index(int index) {
+Ref<AtlasTexture> TextureMerger::get_texture_index(const int index) {
 	return _packer->get_texture_index(index);
 }
 
-bool TextureMerger::unref_texture_index(int index) {
+bool TextureMerger::unref_texture_index(const int index) {
 	if (_packer->unref_texture_index(index)) {
 		if (has_method("_texture_removed"))
 			call("_texture_removed");
@@ -182,7 +182,7 @@ bool TextureMerger::unref_texture_index(int index) {
 	return false;
 }
 
-bool TextureMerger::unref_texture(Ref<Texture> texture) {
+bool TextureMerger::unref_texture(const Ref<Texture> &texture) {
 	if (_packer->unref_texture(texture)) {
 		if (has_method("_texture_removed"))
 			call("_texture_removed");
@@ -197,7 +197,7 @@ bool TextureMerger::unref_texture(Ref<Texture> texture) {
 	return false;
 }
 
-void TextureMerger::remove_texture_index(int index) {
+void TextureMerger::remove_texture_index(const int index) {
 	_packer->remove_texture_index(index);
 
 	if (has_method("_texture_removed"))
@@ -208,7 +208,7 @@ void TextureMerger::remove_texture_index(int index) {
 	set_dirty(true);
 }
 
-void TextureMerger::remove_texture(Ref<Texture> texture) {
+void TextureMerger::remove_texture(const Ref<Texture> &texture) {
 	_packer->remove_texture(texture);
 
 	if (has_method("_texture_removed"))
@@ -227,7 +227,7 @@ void TextureMerger::clear() {
 	_packer->clear();
 }
 
-Ref<ImageTexture> TextureMerger::get_generated_texture(int index) {
+Ref<ImageTexture> TextureMerger::get_generated_texture(const int index) {
 	return _packer->get_generated_texture(index);
 }
 int TextureMerger::get_generated_texture_count() {

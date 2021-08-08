@@ -46,7 +46,7 @@ void TexturePacker::set_keep_original_atlases(const bool value) {
 Color TexturePacker::get_background_color() const {
 	return _background_color;
 }
-void TexturePacker::set_background_color(const Color color) {
+void TexturePacker::set_background_color(const Color &color) {
 	_background_color = color;
 }
 
@@ -57,7 +57,7 @@ void TexturePacker::set_margin(const int margin) {
 	_margin = margin;
 }
 
-Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
+Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
 	ERR_FAIL_COND_V(!texture.is_valid(), Ref<AtlasTexture>());
 
 	Ref<AtlasTexture> atlas_text = texture;
@@ -140,7 +140,7 @@ Ref<AtlasTexture> TexturePacker::add_texture(Ref<Texture> texture) {
 	return tex;
 }
 
-Ref<AtlasTexture> TexturePacker::get_texture(Ref<Texture> texture) {
+Ref<AtlasTexture> TexturePacker::get_texture(const Ref<Texture> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
@@ -160,19 +160,19 @@ Ref<AtlasTexture> TexturePacker::get_texture(Ref<Texture> texture) {
 	return Ref<Texture>();
 }
 
-Ref<AtlasTexture> TexturePacker::get_texture_index(int index) {
+Ref<AtlasTexture> TexturePacker::get_texture_index(const int index) {
 	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<AtlasTexture>());
 
 	return _rects.get(index)->atlas_texture;
 }
 
-Ref<Texture> TexturePacker::get_original_texture(int index) {
+Ref<Texture> TexturePacker::get_original_texture(const int index) {
 	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<Texture>());
 
 	return _rects.get(index)->original_texture;
 }
 
-bool TexturePacker::contains_texture(Ref<Texture> texture) {
+bool TexturePacker::contains_texture(const Ref<Texture> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
@@ -192,7 +192,7 @@ bool TexturePacker::contains_texture(Ref<Texture> texture) {
 	return false;
 }
 
-bool TexturePacker::unref_texture_index(int index) {
+bool TexturePacker::unref_texture_index(const int index) {
 	ERR_FAIL_INDEX_V(index, _rects.size(), false);
 
 	rect_xywhf *r = _rects.get(index);
@@ -213,7 +213,7 @@ bool TexturePacker::unref_texture_index(int index) {
 	return false;
 }
 
-bool TexturePacker::unref_texture(Ref<Texture> texture) {
+bool TexturePacker::unref_texture(const Ref<Texture> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
@@ -247,7 +247,7 @@ bool TexturePacker::unref_texture(Ref<Texture> texture) {
 	return false;
 }
 
-void TexturePacker::remove_texture_index(int index) {
+void TexturePacker::remove_texture_index(const int index) {
 	ERR_FAIL_INDEX(index, _rects.size());
 
 	rect_xywhf *r = _rects.get(index);
@@ -258,7 +258,7 @@ void TexturePacker::remove_texture_index(int index) {
 	memdelete(r);
 }
 
-void TexturePacker::remove_texture(Ref<Texture> texture) {
+void TexturePacker::remove_texture(const Ref<Texture> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
@@ -307,7 +307,7 @@ void TexturePacker::clear() {
 	_generated_textures.clear();
 }
 
-Ref<ImageTexture> TexturePacker::get_generated_texture(int index) {
+Ref<ImageTexture> TexturePacker::get_generated_texture(const int index) {
 	ERR_FAIL_INDEX_V(index, _generated_textures.size(), Ref<ImageTexture>());
 
 	return _generated_textures.get(index);
@@ -418,7 +418,7 @@ void TexturePacker::merge() {
 	}
 }
 
-int TexturePacker::get_offset_for_format(Image::Format format) {
+int TexturePacker::get_offset_for_format(const Image::Format format) {
 	switch (format) {
 		case Image::FORMAT_RGB8:
 			return 3;
