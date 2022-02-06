@@ -27,7 +27,10 @@ SOFTWARE.
 
 #if VERSION_MAJOR > 3
 #include "core/io/image.h"
-#include "core/object/reference.h"
+#include "core/object/ref_counted.h"
+#ifndef Reference
+#define Reference RefCounted
+#endif
 #include "core/templates/vector.h"
 #include "core/string/ustring.h"
 #include "core/math/color.h"
