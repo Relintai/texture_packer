@@ -83,7 +83,11 @@ Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
 		}
 
 		Ref<AtlasTexture> tex;
+#if VERSION_MAJOR < 4
 		tex.instance();
+#else
+		tex.instantiate();
+#endif
 
 		tex->set_atlas(atlas_text->get_atlas());
 		tex->set_region(atlas_text->get_region());
@@ -120,7 +124,11 @@ Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
 	}
 
 	Ref<AtlasTexture> tex;
+#if VERSION_MAJOR < 4
 	tex.instance();
+#else
+	tex.instantiate();
+#endif
 
 	//Temp setup, so the texture is usable even while the atlases are generating.
 	tex->set_atlas(texture);
@@ -200,7 +208,11 @@ bool TexturePacker::unref_texture_index(const int index) {
 	int rc = --(r->refcount);
 
 	if (rc <= 0) {
+#if VERSION_MAJOR < 4
 		_rects.remove(index);
+#else
+		_rects.remove_at(index);
+#endif
 
 		r->original_texture.unref();
 		r->atlas_texture.unref();
@@ -226,11 +238,14 @@ bool TexturePacker::unref_texture(const Ref<Texture> &texture) {
 			t = r->original_texture;
 
 		if (t == texture) {
-
 			int rc = --(r->refcount);
 
 			if (rc <= 0) {
+#if VERSION_MAJOR < 4
 				_rects.remove(i);
+#else
+				_rects.remove_at(i);
+#endif
 
 				r->original_texture.unref();
 				r->atlas_texture.unref();
@@ -271,8 +286,11 @@ void TexturePacker::remove_texture(const Ref<Texture> &texture) {
 			t = r->original_texture;
 
 		if (t == texture) {
-
+#if VERSION_MAJOR < 4
 			_rects.remove(i);
+#else
+			_rects.remove_at(i);
+#endif
 
 			r->original_texture.unref();
 			r->atlas_texture.unref();
@@ -364,7 +382,11 @@ void TexturePacker::merge() {
 
 				ERR_CONTINUE(!otext.is_valid());
 
+#if VERSION_MAJOR < 4
 				Ref<Image> img = otext->get_data();
+#else
+				Ref<Image> img = otext->get_image();
+#endif
 
 				ERR_CONTINUE(!img.is_valid());
 
@@ -383,7 +405,6 @@ void TexturePacker::merge() {
 
 					int row_width = (r->w - 2 * _margin);
 					for (int x = 0; x < row_width; ++x) {
-
 						for (int sx = 0; sx < input_format_offset; ++sx) {
 							data.set(start_indx + (x * 4) + sx, image_data[orig_img_indx + sx + (x * input_format_offset)]);
 						}
@@ -392,11 +413,19 @@ void TexturePacker::merge() {
 			}
 
 			Ref<Image> image;
+#if VERSION_MAJOR < 4
 			image.instance();
+#else
+			image.instantiate();
+#endif
 			image->create(b.size.w, b.size.h, false, Image::FORMAT_RGBA8, data);
 
 			Ref<ImageTexture> texture;
+#if VERSION_MAJOR < 4
 			texture.instance();
+#else
+			texture.instantiate();
+#endif
 
 #if VERSION_MAJOR < 4
 			texture->create_from_image(image, _texture_flags);
@@ -452,11 +481,6 @@ int TexturePacker::get_offset_for_format(const Image::Format format) {
 		case Image::FORMAT_PVRTC2A:
 		case Image::FORMAT_PVRTC4:
 		case Image::FORMAT_PVRTC4A:
-#else
-		case Image::FORMAT_PVRTC1_2:
-		case Image::FORMAT_PVRTC1_2A:
-		case Image::FORMAT_PVRTC1_4:
-		case Image::FORMAT_PVRTC1_4A:
 #endif
 		case Image::FORMAT_ETC:
 		case Image::FORMAT_ETC2_R11:

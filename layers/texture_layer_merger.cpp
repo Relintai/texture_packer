@@ -22,6 +22,8 @@ SOFTWARE.
 
 #include "texture_layer_merger.h"
 
+#include "core/version.h"
+
 int TextureLayerMerger::get_width() const {
 	return _width;
 }
@@ -66,7 +68,11 @@ Ref<ImageTexture> TextureLayerMerger::get_result_as_texture() const {
 	ERR_FAIL_COND_V(!_image.is_valid(), Ref<ImageTexture>());
 
 	Ref<ImageTexture> tex;
+#if VERSION_MAJOR < 4
 	tex.instance();
+#else
+	tex.instantiate();
+#endif
 	tex->create_from_image(_image);
 
 	return tex;
@@ -160,7 +166,11 @@ void TextureLayerMerger::set_rect(const int p_index, const Rect2 &p_rect) {
 void TextureLayerMerger::remove_texture(const int p_index) {
 	ERR_FAIL_INDEX(p_index, _entries.size());
 
+#if VERSION_MAJOR < 4
 	return _entries.remove(p_index);
+#else
+	return _entries.remove_at(p_index);
+#endif
 }
 
 int TextureLayerMerger::get_texture_count() {
@@ -174,8 +184,13 @@ void TextureLayerMerger::clear() {
 void TextureLayerMerger::merge() {
 	ERR_FAIL_COND(_width <= 0 || _height <= 0);
 
-	if (!_image.is_valid())
+	if (!_image.is_valid()) {
+#if VERSION_MAJOR < 4
 		_image.instance();
+#else
+		_image.instantiate();
+#endif
+	}
 
 	PoolVector<uint8_t> data;
 	data.resize(_width * _height * 4);
@@ -209,7 +224,11 @@ void TextureLayerMerger::merge() {
 
 			ERR_CONTINUE(!atlas.is_valid());
 
+#if VERSION_MAJOR < 4
 			input_image = atlas->get_data();
+#else
+			input_image = atlas->get_image();
+#endif
 
 			Rect2 region = altas_texture->get_region();
 
@@ -225,7 +244,11 @@ void TextureLayerMerger::merge() {
 			if (rh > atlas_h)
 				rh = atlas_h;
 		} else {
+#if VERSION_MAJOR < 4
 			input_image = e.texture->get_data();
+#else
+			input_image = e.texture->get_image();
+#endif
 		}
 
 		ERR_CONTINUE(!input_image.is_valid());

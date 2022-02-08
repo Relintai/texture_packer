@@ -87,6 +87,12 @@ public:
 
 	void merge();
 
+#if VERSION_MAJOR >= 4
+	GDVIRTUAL0(_texture_merged);
+	GDVIRTUAL1(_texture_added, Ref<AtlasTexture>);
+	GDVIRTUAL0(_texture_removed);
+#endif
+
 	TextureMerger();
 	~TextureMerger();
 

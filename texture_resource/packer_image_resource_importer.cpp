@@ -74,14 +74,23 @@ Error PackerImageResourceImporter::import(const String &p_source_file, const Str
 	float scale = p_options["scale"];
 
 	Ref<Image> image;
+#if VERSION_MAJOR < 4
 	image.instance();
+#else
+	image.instantiate();
+#endif
 	Error err = ImageLoader::load_image(p_source_file, image, NULL, hdr_as_srgb, scale);
 
-	if (err != OK)
+	if (err != OK) {
 		return err;
+	}
 
 	Ref<PackerImageResource> res;
+#if VERSION_MAJOR < 4
 	res.instance();
+#else
+	res.instantiate();
+#endif
 
 	res->set_data(image);
 
