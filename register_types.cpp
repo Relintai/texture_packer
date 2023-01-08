@@ -22,6 +22,8 @@ SOFTWARE.
 
 #include "register_types.h"
 
+#include "core/object/class_db.h"
+
 #include "texture_merger.h"
 #include "texture_packer.h"
 
@@ -35,18 +37,22 @@ SOFTWARE.
 #include "texture_resource/editor_plugin_packer_image_resource.h"
 #endif
 
-void register_texture_packer_types() {
-	ClassDB::register_class<TexturePacker>();
-	ClassDB::register_class<TextureMerger>();
+void register_texture_packer_types(ModuleInitializationLevel p_level) {
+	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
+		GDREGISTER_CLASS(TexturePacker);
+		GDREGISTER_CLASS(TextureMerger);
 
-	ClassDB::register_class<PackerImageResource>();
+		GDREGISTER_CLASS(PackerImageResource);
 
-	ClassDB::register_class<TextureLayerMerger>();
+		GDREGISTER_CLASS(TextureLayerMerger);
+	}
 
 #ifdef TOOLS_ENABLED
-	EditorPlugins::add_by_type<EditorPluginPackerImageResource>();
+	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR) {
+		EditorPlugins::add_by_type<EditorPluginPackerImageResource>();
+	}
 #endif
 }
 
-void unregister_texture_packer_types() {
+void unregister_texture_packer_types(ModuleInitializationLevel p_level) {
 }
