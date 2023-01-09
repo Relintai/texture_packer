@@ -84,7 +84,7 @@ Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
 
 		Ref<AtlasTexture> tex;
 #if VERSION_MAJOR < 4
-		tex.instance();
+		tex.instantiate();
 #else
 		tex.instantiate();
 #endif
@@ -125,7 +125,7 @@ Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
 
 	Ref<AtlasTexture> tex;
 #if VERSION_MAJOR < 4
-	tex.instance();
+	tex.instantiate();
 #else
 	tex.instantiate();
 #endif
@@ -414,7 +414,7 @@ void TexturePacker::merge() {
 
 			Ref<Image> image;
 #if VERSION_MAJOR < 4
-			image.instance();
+			image.instantiate();
 #else
 			image.instantiate();
 #endif
@@ -422,7 +422,7 @@ void TexturePacker::merge() {
 
 			Ref<ImageTexture> texture;
 #if VERSION_MAJOR < 4
-			texture.instance();
+			texture.instantiate();
 #else
 			texture.instantiate();
 #endif

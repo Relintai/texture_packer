@@ -277,7 +277,7 @@ TextureMerger::TextureMerger() {
 	_automatic_merge = false;
 
 #if VERSION_MAJOR < 4
-	_packer.instance();
+	_packer.instantiate();
 #else
 	_packer.instantiate();
 #endif

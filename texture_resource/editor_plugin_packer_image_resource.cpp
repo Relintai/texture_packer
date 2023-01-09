@@ -28,7 +28,7 @@ void EditorPluginPackerImageResource::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE:
 #if VERSION_MAJOR < 4
-			_importer.instance();
+			_importer.instantiate();
 #else
 			_importer.instantiate();
 #endif

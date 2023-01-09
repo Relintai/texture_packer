@@ -69,7 +69,7 @@ Ref<ImageTexture> TextureLayerMerger::get_result_as_texture() const {
 
 	Ref<ImageTexture> tex;
 #if VERSION_MAJOR < 4
-	tex.instance();
+	tex.instantiate();
 #else
 	tex.instantiate();
 #endif
@@ -186,7 +186,7 @@ void TextureLayerMerger::merge() {
 
 	if (!_image.is_valid()) {
 #if VERSION_MAJOR < 4
-		_image.instance();
+		_image.instantiate();
 #else
 		_image.instantiate();
 #endif
