@@ -8,13 +8,13 @@ It uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/re
 
 It should work on all platforms.
 
-It supports both godot 3.2 and 4.0 (master [last tested commit](https://github.com/godotengine/godot/commit/b7e10141197fdd9b0dbc4cfa7890329510d36540)). Note that since 4.0 is still in very early stages I only 
-check whether it works from time to time.
+## Godot Version Support
 
-# Pre-built binaries
+This branch tries to follow godot's master branch (as much as I have time).
 
-You can grab a pre-built editor binary from the [Broken Seals](https://github.com/Relintai/broken_seals/releases) 
-repo, should you want to. It contains all my modules.
+For different godot versions look at the other branches.
+
+Status for this branch: Update for 4.0 is work in progress.
 
 # Building
 
