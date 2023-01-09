@@ -314,9 +314,9 @@ void TextureMerger::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("texture_removed"));
 
 #if VERSION_MAJOR < 4
-	BIND_VMETHOD(MethodInfo("_texture_merged"));
-	BIND_VMETHOD(MethodInfo("_texture_added", PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "AtlasTexture")));
-	BIND_VMETHOD(MethodInfo("_texture_removed"));
+	//BIND_VMETHOD(MethodInfo("_texture_merged"));
+	//BIND_VMETHOD(MethodInfo("_texture_added", PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "AtlasTexture")));
+	//BIND_VMETHOD(MethodInfo("_texture_removed"));
 #else
 	GDVIRTUAL_BIND(_texture_merged);
 	GDVIRTUAL_BIND(_texture_added, "texture");
