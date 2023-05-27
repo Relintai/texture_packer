@@ -21,23 +21,18 @@ SOFTWARE.
 */
 
 #include "register_types.h"
-
 #include "core/object/class_db.h"
 
+#include "layers/texture_layer_merger.h"
 #include "texture_merger.h"
 #include "texture_packer.h"
-
 #include "texture_resource/packer_image_resource.h"
 
-#include "layers/texture_layer_merger.h"
-
 #ifdef TOOLS_ENABLED
-#include "editor/editor_plugin.h"
-
-#include "texture_resource/editor_plugin_packer_image_resource.h"
+#include "editor/editor_plugin_packer_image_resource.h"
 #endif
 
-void register_texture_packer_types(ModuleInitializationLevel p_level) {
+void initialize_texture_packer_module(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
 		GDREGISTER_CLASS(TexturePacker);
 		GDREGISTER_CLASS(TextureMerger);
@@ -54,5 +49,5 @@ void register_texture_packer_types(ModuleInitializationLevel p_level) {
 #endif
 }
 
-void unregister_texture_packer_types(ModuleInitializationLevel p_level) {
+void uninitialize_texture_packer_module(ModuleInitializationLevel p_level) {
 }

@@ -8,38 +8,9 @@ It uses the legacy version of [rectpack2D](https://github.com/TeamHypersomnia/re
 
 It should work on all platforms.
 
-## Godot Version Support
-
-This branch tries to follow godot's master branch (as much as I have time).
-
-For different godot versions look at the other branches.
-
-Status for this branch: Update for 4.0 is work in progress.
-
 # Building
 
-1. Get the source code for the engine.
-
-If you want Godot 3.2:
-```git clone -b 3.2 https://github.com/godotengine/godot.git godot```
-
-If you want Godot 4.0:
-```git clone https://github.com/godotengine/godot.git godot```
-
-
-2. Go into Godot's modules directory.
-
-```
-cd ./godot/modules/
-```
-
-3. Clone this repository
-
-```
-git clone https://github.com/Relintai/texture_packer texture_packer
-```
-
-4. Build Godot. [Tutorial](https://docs.godotengine.org/en/latest/development/compiling/index.html)
+Build Godot. [Tutorial](https://docs.godotengine.org/en/latest/development/compiling/index.html)
 
 # Features and Usage
 
@@ -53,14 +24,14 @@ Supports filters, custom background color, margins.
 
 ### The keep_original_atlases option:
 
-If you set this to true, and then add AtlasTextures, TexturePacker will change these ones (the ones you actually added) 
+If you set this to true, and then add AtlasTextures, TexturePacker will change these ones (the ones you actually added)
 after the bake.
 
 You can use this to bake gui textures together, without changing the resources everywhere at runtime.
 Think of rpgs, when you have a huge number of potential icons that the player can put on his or her actionbars.
 You can take look at Tales of Maj'Eyal or pretty much every actually complex MMORPGs as an example.
 
-Note: Doing something like this in only recommended, if you can't pre-make the atlases (or it's really unfeasible), you are better off 
+Note: Doing something like this in only recommended, if you can't pre-make the atlases (or it's really unfeasible), you are better off
 making the atlases yourself during development.
 
 ## TextureMerger
@@ -92,7 +63,7 @@ change to the first added texture's size.
 
 add_texture looks like this:
 
-``` 
+```
 void add_texture(Ref<Texture> p_texture, Color p_color = Color(1, 1, 1, 1), Vector2 p_position = Vector2(), Rect2 p_rect = Rect2());
 ```
 
@@ -101,5 +72,5 @@ With the position parameter you can offset your texture (in the resulted texture
 
 There are setters to manipulate the added data later.
 
-After the merge, you can either use `get_result_as_texture()` (it creates an ImageTexture on the fly), or the `data` property to 
+After the merge, you can either use `get_result_as_texture()` (it creates an ImageTexture on the fly), or the `data` property to
 grab the resulting Image.

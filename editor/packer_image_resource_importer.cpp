@@ -24,10 +24,6 @@ SOFTWARE.
 
 #include "core/version.h"
 
-#if VERSION_MAJOR >= 4
-#define REAL FLOAT
-#endif
-
 String PackerImageResourceImporter::get_importer_name() const {
 	return "packer_image_resource";
 }
@@ -62,7 +58,7 @@ String PackerImageResourceImporter::get_preset_name(int p_idx) const {
 
 void PackerImageResourceImporter::get_import_options(const String &p_path, List<ImportOption> *r_options, int p_preset) const {
 	r_options->push_back(ImportOption(PropertyInfo(Variant::BOOL, "hdr_as_srgb"), false));
-	r_options->push_back(ImportOption(PropertyInfo(Variant::REAL, "scale"), 1.0));
+	r_options->push_back(ImportOption(PropertyInfo(Variant::FLOAT, "scale"), 1.0));
 }
 
 bool PackerImageResourceImporter::get_option_visibility(const String &p_path, const String &p_option, const HashMap<StringName, Variant> &p_options) const {
@@ -72,31 +68,16 @@ bool PackerImageResourceImporter::get_option_visibility(const String &p_path, co
 Error PackerImageResourceImporter::import(const String &p_source_file, const String &p_save_path, const HashMap<StringName, Variant> &p_options, List<String> *r_platform_variants, List<String> *r_gen_files, Variant *r_metadata) {
 	bool hdr_as_srgb = p_options["hdr_as_srgb"];
 	float scale = p_options["scale"];
-
 	Ref<Image> image;
-#if VERSION_MAJOR < 4
 	image.instantiate();
-#else
-	image.instantiate();
-#endif
-	Error err = ImageLoader::load_image(p_source_file, image, NULL, hdr_as_srgb, scale);
-
+	Error err = ImageLoader::load_image(p_source_file, image, nullptr, hdr_as_srgb, scale);
 	if (err != OK) {
 		return err;
 	}
-
 	Ref<PackerImageResource> res;
-#if VERSION_MAJOR < 4
 	res.instantiate();
-#else
-	res.instantiate();
-#endif
-
 	res->set_data(image);
-
 	return ResourceSaver::save(res, p_save_path + "." + get_save_extension());
-
-	return Error::ERR_PARSE_ERROR;
 }
 
 PackerImageResourceImporter::PackerImageResourceImporter() {

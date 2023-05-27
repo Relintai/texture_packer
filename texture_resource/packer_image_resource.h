@@ -42,7 +42,7 @@ public:
 	int get_width() const;
 	int get_height() const;
 
-	RID get_rid() const;
+	RID get_rid() const override;
 	bool has_alpha() const;
 
 	void set_flags(uint32_t p_flags);

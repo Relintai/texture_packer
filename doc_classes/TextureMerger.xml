@@ -1,157 +1,186 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="TextureMerger" inherits="Node" version="3.5">
+<class name="TextureMerger" inherits="Node" version="4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
 	<brief_description>
-		A node, that can merge textures.
+		A node that can merge textures.
 	</brief_description>
 	<description>
+		TextureMerger is a utility node that allows you to combine multiple [Texture] objects into a single [AtlasTexture]. It provides methods for adding, modifying, and removing textures, as well as controlling their position and cropping. Once all textures are set up, the `merge` method can be called to create the final combined texture.
 	</description>
 	<tutorials>
 	</tutorials>
 	<methods>
 		<method name="_texture_added" qualifiers="virtual">
 			<return type="void" />
-			<argument index="0" name="texture" type="AtlasTexture" />
+			<param index="0" name="texture" type="AtlasTexture" />
 			<description>
+				Called when a new texture is added to the merger. Can be overridden in extended classes to implement custom behavior.
 			</description>
 		</method>
 		<method name="_texture_merged" qualifiers="virtual">
 			<return type="void" />
 			<description>
+				Called when the textures are merged. Can be overridden in extended classes to implement custom behavior.
 			</description>
 		</method>
 		<method name="_texture_removed" qualifiers="virtual">
 			<return type="void" />
 			<description>
+				Called when a texture is removed from the merger. Can be overridden in derived classes to implement custom behavior.
 			</description>
 		</method>
 		<method name="add_texture">
 			<return type="AtlasTexture" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture" />
 			<description>
+				Adds a new texture to the merger and returns the corresponding [AtlasTexture].
 			</description>
 		</method>
 		<method name="clear">
 			<return type="void" />
 			<description>
+				Removes all textures from the merger.
 			</description>
 		</method>
 		<method name="get_dirty" qualifiers="const">
 			<return type="bool" />
 			<description>
+				Returns whether the merger is marked as dirty, indicating that the merged texture needs to be updated.
 			</description>
 		</method>
 		<method name="get_generated_texture">
 			<return type="ImageTexture" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the generated [ImageTexture] at the specified index after merging.
 			</description>
 		</method>
 		<method name="get_generated_texture_count">
 			<return type="int" />
 			<description>
+				Returns the total number of generated textures in the merger.
 			</description>
 		</method>
 		<method name="get_original_texture">
 			<return type="Texture" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the original [Texture] object at the specified index.
 			</description>
 		</method>
 		<method name="get_packer" qualifiers="const">
 			<return type="TexturePacker" />
 			<description>
+				Returns the [TexturePacker] instance used by the merger.
 			</description>
 		</method>
 		<method name="get_texture">
 			<return type="AtlasTexture" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture" />
 			<description>
+				Returns the [AtlasTexture] corresponding to the given [Texture] object.
 			</description>
 		</method>
 		<method name="get_texture_count">
 			<return type="int" />
 			<description>
+				Returns the total number of textures in the merger.
 			</description>
 		</method>
 		<method name="get_texture_index">
 			<return type="AtlasTexture" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the [AtlasTexture] at the specified index.
 			</description>
 		</method>
 		<method name="merge">
 			<return type="void" />
 			<description>
+				Merges all textures into a single [AtlasTexture]. Call `get_generated_texture` after this method to get the merged result.
 			</description>
 		</method>
 		<method name="remove_texture">
 			<return type="void" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture" />
 			<description>
+				Removes the specified texture from the merger.
 			</description>
 		</method>
 		<method name="remove_texture_index">
 			<return type="void" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Removes the texture at the specified index from the merger.
 			</description>
 		</method>
 		<method name="set_dirty">
 			<return type="void" />
-			<argument index="0" name="value" type="bool" />
+			<param index="0" name="value" type="bool" />
 			<description>
+				Sets the dirty flag for the merger, indicating that the merged texture needs to be updated.
 			</description>
 		</method>
 		<method name="set_packer">
 			<return type="void" />
-			<argument index="0" name="packer" type="TexturePacker" />
+			<param index="0" name="packer" type="TexturePacker" />
 			<description>
+				Sets the [TexturePacker] instance to be used by the merger.
 			</description>
 		</method>
 		<method name="unref_texture">
 			<return type="bool" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture" />
 			<description>
+				Decreases the reference count of the specified texture and removes it from the merger if the reference count reaches zero. Returns true if the texture was removed.
 			</description>
 		</method>
 		<method name="unref_texture_index">
 			<return type="bool" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Decreases the reference count of the texture at the specified index and removes it from the merger if the reference count reaches zero. Returns true if the texture was removed.
 			</description>
 		</method>
 	</methods>
 	<members>
 		<member name="automatic_merge" type="bool" setter="set_automatic_merge" getter="get_automatic_merge" default="false">
+			If true, textures will be automatically merged when added or removed.
 		</member>
-		<member name="background_color" type="Color" setter="set_background_color" getter="get_background_color" default="Color( 0, 0, 0, 1 )">
+		<member name="background_color" type="Color" setter="set_background_color" getter="get_background_color" default="Color(0, 0, 0, 1)">
+			The background color of the generated [AtlasTexture].
 		</member>
 		<member name="keep_original_atlases" type="bool" setter="set_keep_original_atlases" getter="get_keep_original_atlases" default="false">
+			If true, original atlases will be kept in memory after merging.
 		</member>
 		<member name="margin" type="int" setter="set_margin" getter="get_margin" default="0">
+			The margin between textures in the generated [AtlasTexture].
 		</member>
 		<member name="max_atlas_size" type="int" setter="set_max_atlas_size" getter="get_max_atlas_size" default="1024">
+			The maximum size of the generated [AtlasTexture].
 		</member>
-		<member name="texture_flags" type="int" setter="set_texture_flags" getter="get_texture_flags" default="5">
+		<member name="texture_flags" type="int" setter="set_texture_flags" getter="get_texture_flags" default="0">
+			[Texture] flags to apply to the generated [AtlasTexture].
 		</member>
-		<member name="textures" type="Array" setter="set_textures" getter="get_textures" default="[  ]">
+		<member name="textures" type="Array" setter="set_textures" getter="get_textures" default="[]">
+			Array of textures to be merged.
 		</member>
 	</members>
 	<signals>
 		<signal name="texture_added">
-			<argument index="0" name="texture" type="AtlasTexture" />
+			<param index="0" name="texture" type="AtlasTexture" />
 			<description>
+				Emitted when a new texture is added to the merger.
 			</description>
 		</signal>
 		<signal name="texture_merged">
 			<description>
+				Emitted when the textures are merged.
 			</description>
 		</signal>
 		<signal name="texture_removed">
 			<description>
+				Emitted when a texture is removed from the merger.
 			</description>
 		</signal>
 	</signals>
-	<constants>
-	</constants>
 </class>

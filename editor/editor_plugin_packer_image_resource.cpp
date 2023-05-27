@@ -27,11 +27,7 @@ SOFTWARE.
 void EditorPluginPackerImageResource::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE:
-#if VERSION_MAJOR < 4
 			_importer.instantiate();
-#else
-			_importer.instantiate();
-#endif
 			add_import_plugin(_importer);
 
 			break;
@@ -44,6 +40,5 @@ void EditorPluginPackerImageResource::_notification(int p_what) {
 	}
 }
 
-EditorPluginPackerImageResource::EditorPluginPackerImageResource(EditorNode *node) {
-	_node = node;
+EditorPluginPackerImageResource::EditorPluginPackerImageResource() {
 }

@@ -25,13 +25,8 @@ SOFTWARE.
 
 #include "core/version.h"
 
-#if VERSION_MAJOR > 3
 #include "core/templates/vector.h"
 #include "core/config/engine.h"
-#else
-#include "core/vector.h"
-#include "core/engine.h"
-#endif
 
 #include "scene/main/node.h"
 

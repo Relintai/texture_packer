@@ -25,38 +25,19 @@ SOFTWARE.
 
 #include "core/version.h"
 
-#if VERSION_MAJOR > 3
 #include "core/io/image.h"
 #include "core/object/ref_counted.h"
-#ifndef Reference
-#define Reference RefCounted
-#endif
 #include "core/templates/vector.h"
 #include "core/string/ustring.h"
 #include "core/math/color.h"
-#else
-#include "core/image.h"
-#include "core/reference.h"
-#include "core/vector.h"
-#include "core/ustring.h"
-#include "core/color.h"
-#endif
 
 #include "scene/resources/texture.h"
 #include <vector>
 
 #include "rectpack2D/pack.h"
 
-#if VERSION_MAJOR >= 4
-#define PoolVector Vector
-#define Texture Texture2D
-#define PoolByteArray PackedByteArray
-
-#define REAL FLOAT
-#endif
-
-class TexturePacker : public Reference {
-	GDCLASS(TexturePacker, Reference);
+class TexturePacker : public RefCounted {
+	GDCLASS(TexturePacker, RefCounted);
 
 public:
 	int get_texture_flags() const;
@@ -74,19 +55,19 @@ public:
 	int get_margin() const;
 	void set_margin(const int margin);
 
-	Ref<AtlasTexture> add_texture(const Ref<Texture> &texture);
+	Ref<AtlasTexture> add_texture(const Ref<Texture2D> &texture);
 
-	Ref<AtlasTexture> get_texture(const Ref<Texture> &texture);
+	Ref<AtlasTexture> get_texture(const Ref<Texture2D> &texture);
 	Ref<AtlasTexture> get_texture_index(const int index);
 
-	Ref<Texture> get_original_texture(const int index);
+	Ref<Texture2D> get_original_texture(const int index);
 
-	bool contains_texture(const Ref<Texture> &texture);
+	bool contains_texture(const Ref<Texture2D> &texture);
 
 	bool unref_texture_index(const int index);
-	bool unref_texture(const Ref<Texture> &texture);
+	bool unref_texture(const Ref<Texture2D> &texture);
 	void remove_texture_index(const int index);
-	void remove_texture(const Ref<Texture> &texture);
+	void remove_texture(const Ref<Texture2D> &texture);
 
 	int get_texture_count();
 	void clear();
@@ -115,4 +96,4 @@ private:
 	Vector<Ref<ImageTexture> > _generated_textures;
 };
 
-#endif
+#endif // TEXTURE_PACKER_H

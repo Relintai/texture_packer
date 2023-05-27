@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "packer_image_resource.h"
+#include "../texture_resource/packer_image_resource.h"
 
 #include "core/version.h"
 
