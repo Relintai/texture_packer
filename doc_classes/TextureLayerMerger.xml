@@ -1,113 +1,131 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="TextureLayerMerger" inherits="Reference" version="3.5">
+<class name="TextureLayerMerger" inherits="RefCounted" version="4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
 	<brief_description>
-		A class, that can merge textures as layers together.
+		A utility class that can merge textures as layers together.
 	</brief_description>
 	<description>
+		TextureLayerMerger is a utility class that allows you to combine multiple [Texture2D] objects into a single [ImageTexture]. It provides methods for adding, modifying, and removing textures, as well as controlling their position, color, and cropping. Once all textures are set up, the `merge` method can be called to create the final combined texture.
 	</description>
 	<tutorials>
 	</tutorials>
 	<methods>
 		<method name="add_texture">
 			<return type="void" />
-			<argument index="0" name="texture" type="Texture" />
-			<argument index="1" name="color" type="Color" default="Color( 1, 1, 1, 1 )" />
-			<argument index="2" name="position" type="Vector2" default="Vector2( 0, 0 )" />
-			<argument index="3" name="rect" type="Rect2" default="Rect2( 0, 0, 0, 0 )" />
+			<param index="0" name="texture" type="Texture2D" />
+			<param index="1" name="color" type="Color" default="Color(1, 1, 1, 1)" />
+			<param index="2" name="position" type="Vector2" default="Vector2(0, 0)" />
+			<param index="3" name="rect" type="Rect2" default="Rect2(0, 0, 0, 0)" />
 			<description>
+				Adds a new texture layer with the specified texture, color, position, and optional cropping rectangle.
 			</description>
 		</method>
 		<method name="clear">
 			<return type="void" />
 			<description>
+				Removes all texture layers from the merger.
 			</description>
 		</method>
 		<method name="get_color">
 			<return type="Color" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the color of the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="get_position">
 			<return type="Vector2" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the position of the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="get_rect">
 			<return type="Rect2" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the cropping rectangle of the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="get_result_as_texture" qualifiers="const">
 			<return type="ImageTexture" />
 			<description>
+				Returns the merged result as an [ImageTexture]. Call `merge` before using this method to get the updated result.
 			</description>
 		</method>
 		<method name="get_texture">
-			<return type="Texture" />
-			<argument index="0" name="index" type="int" />
+			<return type="Texture2D" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the [Texture2D] object of the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="get_texture_count">
 			<return type="int" />
 			<description>
+				Returns the total number of texture layers in the merger.
 			</description>
 		</method>
 		<method name="merge">
 			<return type="void" />
 			<description>
+				Merges all texture layers into a single [ImageTexture]. Call `get_result_as_texture` after this method to get the merged result.
 			</description>
 		</method>
 		<method name="remove_texture">
 			<return type="void" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Removes the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="set_color">
 			<return type="void" />
-			<argument index="0" name="index" type="int" />
-			<argument index="1" name="color" type="Color" />
+			<param index="0" name="index" type="int" />
+			<param index="1" name="color" type="Color" />
 			<description>
+				Sets the color of the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="set_position">
 			<return type="void" />
-			<argument index="0" name="index" type="int" />
-			<argument index="1" name="position" type="Vector2" />
+			<param index="0" name="index" type="int" />
+			<param index="1" name="position" type="Vector2" />
 			<description>
+				Sets the position of the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="set_rect">
 			<return type="void" />
-			<argument index="0" name="index" type="int" />
-			<argument index="1" name="rect" type="Rect2" />
+			<param index="0" name="index" type="int" />
+			<param index="1" name="rect" type="Rect2" />
 			<description>
+				Sets the cropping rectangle of the texture layer at the specified index.
 			</description>
 		</method>
 		<method name="set_texture">
 			<return type="void" />
-			<argument index="0" name="index" type="int" />
-			<argument index="1" name="texture" type="Texture" />
+			<param index="0" name="index" type="int" />
+			<param index="1" name="texture" type="Texture2D" />
 			<description>
+				Sets the [Texture2D] object of the texture layer at the specified index.
 			</description>
 		</method>
 	</methods>
 	<members>
-		<member name="base_color" type="Color" setter="set_base_color" getter="get_base_color" default="Color( 0, 0, 0, 1 )">
+		<member name="base_color" type="Color" setter="set_base_color" getter="get_base_color" default="Color(0, 0, 0, 1)">
+			The base color used as the background for the merged texture.
 		</member>
 		<member name="data" type="Image" setter="set_data" getter="get_data">
+			The [Image] data of the merged texture.
 		</member>
 		<member name="height" type="int" setter="set_height" getter="get_height" default="0">
+			The height of the merged texture.
 		</member>
 		<member name="texture_flags" type="int" setter="set_texture_flags" getter="get_texture_flags" default="0">
+			[Texture] flags applied to the merged texture.
 		</member>
 		<member name="width" type="int" setter="set_width" getter="get_width" default="0">
+			The width of the merged texture.
 		</member>
 	</members>
-	<constants>
-	</constants>
 </class>

@@ -28,4 +28,4 @@ SOFTWARE.
 void initialize_texture_packer_module(ModuleInitializationLevel p_level);
 void uninitialize_texture_packer_module(ModuleInitializationLevel p_level);
 
-#endif 
+#endif // TEXTURE_PACKER_REGISTER_TYPES_H

@@ -78,7 +78,7 @@ Ref<ImageTexture> TextureLayerMerger::get_result_as_texture() const {
 	return tex;
 }
 
-void TextureLayerMerger::add_texture(const Ref<Texture> &p_texture, const Color &p_color, const Vector2 &p_position, Rect2 p_rect) {
+void TextureLayerMerger::add_texture(const Ref<Texture2D> &p_texture, const Color &p_color, const Vector2 &p_position, Rect2 p_rect) {
 	ERR_FAIL_COND(!p_texture.is_valid());
 
 	LayerMergerEntry entry;
@@ -119,12 +119,12 @@ void TextureLayerMerger::add_texture(const Ref<Texture> &p_texture, const Color 
 	_entries.push_back(entry);
 }
 
-Ref<Texture> TextureLayerMerger::get_texture(const int p_index) {
-	ERR_FAIL_INDEX_V(p_index, _entries.size(), Ref<Texture>());
+Ref<Texture2D> TextureLayerMerger::get_texture(const int p_index) {
+	ERR_FAIL_INDEX_V(p_index, _entries.size(), Ref<Texture2D>());
 
 	return _entries.get(p_index).texture;
 }
-void TextureLayerMerger::set_texture(const int p_index, const Ref<Texture> &p_texture) {
+void TextureLayerMerger::set_texture(const int p_index, const Ref<Texture2D> &p_texture) {
 	ERR_FAIL_INDEX(p_index, _entries.size());
 
 	_entries.get(p_index).texture = p_texture;
@@ -192,7 +192,7 @@ void TextureLayerMerger::merge() {
 #endif
 	}
 
-	PoolVector<uint8_t> data;
+	Vector<uint8_t> data;
 	data.resize(_width * _height * 4);
 
 	write_base_color_to_array(data);
@@ -220,7 +220,7 @@ void TextureLayerMerger::merge() {
 		Ref<Image> input_image;
 
 		if (altas_texture.is_valid()) {
-			Ref<Texture> atlas = altas_texture->get_atlas();
+			Ref<Texture2D> atlas = altas_texture->get_atlas();
 
 			ERR_CONTINUE(!atlas.is_valid());
 
@@ -255,7 +255,7 @@ void TextureLayerMerger::merge() {
 
 		int iiw = input_image->get_width();
 		int iih = input_image->get_height();
-		PoolVector<uint8_t> input_image_data = input_image->get_data();
+		Vector<uint8_t> input_image_data = input_image->get_data();
 
 		const Color &blendcolor = e.color;
 
@@ -333,15 +333,10 @@ void TextureLayerMerger::merge() {
 			}
 		}
 	}
-
-#if VERSION_MAJOR < 4
-	_image->create(_width, _height, (_texture_flags & Texture::FLAG_MIPMAPS) != 0, Image::FORMAT_RGBA8, data);
-#else
-	_image->create(_width, _height, true, Image::FORMAT_RGBA8, data);
-#endif
+	_image = Image::create_from_data(_width, _height, true, Image::FORMAT_RGBA8, data);
 }
 
-void TextureLayerMerger::write_base_color_to_array(PoolVector<uint8_t> &data) {
+void TextureLayerMerger::write_base_color_to_array(Vector<uint8_t> &data) {
 	int cr = _base_color.r * 255;
 	int cg = _base_color.g * 255;
 	int cb = _base_color.b * 255;

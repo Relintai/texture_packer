@@ -57,7 +57,7 @@ void TexturePacker::set_margin(const int margin) {
 	_margin = margin;
 }
 
-Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
+Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture2D> &texture) {
 	ERR_FAIL_COND_V(!texture.is_valid(), Ref<AtlasTexture>());
 
 	Ref<AtlasTexture> atlas_text = texture;
@@ -67,7 +67,7 @@ Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
 		for (int i = 0; i < _rects.size(); ++i) {
 			rect_xywhf *r = _rects.get(i);
 
-			Ref<Texture> t;
+			Ref<Texture2D> t;
 			Ref<AtlasTexture> at = texture;
 
 			if (_keep_original_atlases && at.is_valid())
@@ -148,11 +148,11 @@ Ref<AtlasTexture> TexturePacker::add_texture(const Ref<Texture> &texture) {
 	return tex;
 }
 
-Ref<AtlasTexture> TexturePacker::get_texture(const Ref<Texture> &texture) {
+Ref<AtlasTexture> TexturePacker::get_texture(const Ref<Texture2D> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
-		Ref<Texture> t;
+		Ref<Texture2D> t;
 		Ref<AtlasTexture> at = texture;
 
 		if (_keep_original_atlases && at.is_valid())
@@ -165,7 +165,7 @@ Ref<AtlasTexture> TexturePacker::get_texture(const Ref<Texture> &texture) {
 		}
 	}
 
-	return Ref<Texture>();
+	return Ref<Texture2D>();
 }
 
 Ref<AtlasTexture> TexturePacker::get_texture_index(const int index) {
@@ -174,17 +174,17 @@ Ref<AtlasTexture> TexturePacker::get_texture_index(const int index) {
 	return _rects.get(index)->atlas_texture;
 }
 
-Ref<Texture> TexturePacker::get_original_texture(const int index) {
-	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<Texture>());
+Ref<Texture2D> TexturePacker::get_original_texture(const int index) {
+	ERR_FAIL_INDEX_V(index, _rects.size(), Ref<Texture2D>());
 
 	return _rects.get(index)->original_texture;
 }
 
-bool TexturePacker::contains_texture(const Ref<Texture> &texture) {
+bool TexturePacker::contains_texture(const Ref<Texture2D> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
-		Ref<Texture> t;
+		Ref<Texture2D> t;
 		Ref<AtlasTexture> at = texture;
 
 		if (_keep_original_atlases && at.is_valid())
@@ -225,11 +225,11 @@ bool TexturePacker::unref_texture_index(const int index) {
 	return false;
 }
 
-bool TexturePacker::unref_texture(const Ref<Texture> &texture) {
+bool TexturePacker::unref_texture(const Ref<Texture2D> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
-		Ref<Texture> t;
+		Ref<Texture2D> t;
 		Ref<AtlasTexture> at = texture;
 
 		if (_keep_original_atlases && at.is_valid())
@@ -273,11 +273,11 @@ void TexturePacker::remove_texture_index(const int index) {
 	memdelete(r);
 }
 
-void TexturePacker::remove_texture(const Ref<Texture> &texture) {
+void TexturePacker::remove_texture(const Ref<Texture2D> &texture) {
 	for (int i = 0; i < _rects.size(); ++i) {
 		rect_xywhf *r = _rects.get(i);
 
-		Ref<Texture> t;
+		Ref<Texture2D> t;
 		Ref<AtlasTexture> at = texture;
 
 		if (_keep_original_atlases && at.is_valid())
@@ -345,7 +345,7 @@ void TexturePacker::merge() {
 		for (uint32_t i = 0; i < bins.size(); ++i) {
 			bin b = bins[i];
 
-			PoolByteArray data;
+			PackedByteArray data;
 			data.resize(b.size.w * b.size.h * 4);
 
 			//Setup background color
@@ -365,7 +365,7 @@ void TexturePacker::merge() {
 			for (uint32_t j = 0; j < b.rects.size(); ++j) {
 				rect_xywhf *r = b.rects[j];
 
-				Ref<Texture> otext = r->original_texture;
+				Ref<Texture2D> otext = r->original_texture;
 				Ref<AtlasTexture> aotext = otext;
 
 				int rect_pos_x = 0;
@@ -392,7 +392,7 @@ void TexturePacker::merge() {
 
 				int img_width = img->get_width();
 
-				PoolByteArray image_data = img->get_data();
+				PackedByteArray image_data = img->get_data();
 
 				int input_format_offset = get_offset_for_format(img->get_format());
 
@@ -412,26 +412,9 @@ void TexturePacker::merge() {
 				}
 			}
 
-			Ref<Image> image;
-#if VERSION_MAJOR < 4
-			image.instantiate();
-#else
-			image.instantiate();
-#endif
-			image->create(b.size.w, b.size.h, false, Image::FORMAT_RGBA8, data);
+			Ref<Image> image = Image::create_from_data(b.size.w, b.size.h, false, Image::FORMAT_RGBA8, data);
 
-			Ref<ImageTexture> texture;
-#if VERSION_MAJOR < 4
-			texture.instantiate();
-#else
-			texture.instantiate();
-#endif
-
-#if VERSION_MAJOR < 4
-			texture->create_from_image(image, _texture_flags);
-#else
-			texture->create_from_image(image);
-#endif
+			Ref<ImageTexture> texture = ImageTexture::create_from_image(image);
 
 			_generated_textures.set(i, texture);
 
@@ -476,12 +459,6 @@ int TexturePacker::get_offset_for_format(const Image::Format format) {
 		case Image::FORMAT_BPTC_RGBA:
 		case Image::FORMAT_BPTC_RGBF:
 		case Image::FORMAT_BPTC_RGBFU:
-#if VERSION_MAJOR <= 3
-		case Image::FORMAT_PVRTC2:
-		case Image::FORMAT_PVRTC2A:
-		case Image::FORMAT_PVRTC4:
-		case Image::FORMAT_PVRTC4A:
-#endif
 		case Image::FORMAT_ETC:
 		case Image::FORMAT_ETC2_R11:
 		case Image::FORMAT_ETC2_R11S:
@@ -490,13 +467,13 @@ int TexturePacker::get_offset_for_format(const Image::Format format) {
 		case Image::FORMAT_ETC2_RGB8:
 		case Image::FORMAT_ETC2_RGBA8:
 		case Image::FORMAT_ETC2_RGB8A1:
-#if VERSION_MAJOR >= 4
+		case Image::FORMAT_ASTC_4x4:
+		case Image::FORMAT_ASTC_4x4_HDR:
+		case Image::FORMAT_ASTC_8x8:
+		case Image::FORMAT_ASTC_8x8_HDR:
 		case Image::FORMAT_RGB565:
 		case Image::FORMAT_ETC2_RA_AS_RG:
 		case Image::FORMAT_DXT5_RA_AS_RG:
-#else
-		case Image::FORMAT_RGBA5551:
-#endif
 		case Image::FORMAT_MAX:
 			return 0;
 	}
@@ -506,7 +483,7 @@ int TexturePacker::get_offset_for_format(const Image::Format format) {
 
 TexturePacker::TexturePacker() {
 #if VERSION_MAJOR < 4
-	_texture_flags = Texture::FLAG_MIPMAPS | Texture::FLAG_FILTER;
+	_texture_flags = Texture2D::FLAG_MIPMAPS | Texture2D::FLAG_FILTER;
 #else
 	_texture_flags = 0;
 #endif

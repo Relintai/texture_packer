@@ -25,32 +25,17 @@ SOFTWARE.
 
 #include "core/version.h"
 
-#if VERSION_MAJOR > 3
-#include "core/object/ref_counted.h"
-#ifndef Reference
-#define Reference RefCounted
-#endif
 #include "core/templates/vector.h"
 #include "core/io/image.h"
-#else
-#include "core/reference.h"
-#include "core/vector.h"
-#include "core/image.h"
-#endif
 
 #include "core/math/rect2.h"
 #include "scene/resources/texture.h"
 
 #include "core/version.h"
 
-#if VERSION_MAJOR >= 4
-#define PoolVector Vector
-#define Texture Texture2D
-#endif
+class TextureLayerMerger : public RefCounted {
 
-class TextureLayerMerger : public Reference {
-
-	GDCLASS(TextureLayerMerger, Reference);
+	GDCLASS(TextureLayerMerger, RefCounted);
 
 public:
 	int get_width() const;
@@ -70,10 +55,10 @@ public:
 
 	Ref<ImageTexture> get_result_as_texture() const;
 
-	void add_texture(const Ref<Texture> &p_texture, const Color &p_color = Color(1, 1, 1, 1), const Vector2 &p_position = Vector2(), Rect2 p_rect = Rect2());
+	void add_texture(const Ref<Texture2D> &p_texture, const Color &p_color = Color(1, 1, 1, 1), const Vector2 &p_position = Vector2(), Rect2 p_rect = Rect2());
 
-	Ref<Texture> get_texture(const int p_index);
-	void set_texture(const int p_index, const Ref<Texture> &p_texture);
+	Ref<Texture2D> get_texture(const int p_index);
+	void set_texture(const int p_index, const Ref<Texture2D> &p_texture);
 
 	Color get_color(const int p_index);
 	void set_color(const int p_index, const Color &p_color);
@@ -94,12 +79,12 @@ public:
 	~TextureLayerMerger();
 
 protected:
-	void write_base_color_to_array(PoolVector<uint8_t> &data);
+	void write_base_color_to_array(Vector<uint8_t> &data);
 
 	static void _bind_methods();
 
 	struct LayerMergerEntry {
-		Ref<Texture> texture;
+		Ref<Texture2D> texture;
 		Color color;
 		Rect2 rect;
 		Vector2 position;
@@ -118,4 +103,4 @@ private:
 	Vector<LayerMergerEntry> _entries;
 };
 
-#endif
+#endif // TEXTURE_LAYER_MERGER_H

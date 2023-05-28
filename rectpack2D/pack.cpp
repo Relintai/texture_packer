@@ -46,7 +46,7 @@ int discard_step = 128;
 For every sorting function, algorithm will perform packing attempts beginning with a bin with width and height equal to max_side,
 and decreasing its dimensions if it finds out that rectangles did actually fit, increasing otherwise.
 Although, it's doing that in sort of binary search manner, so for every comparing function it will perform at most log2(max_side) packing attempts looking for the smallest possible bin size.
-discard_step = 128 means that the algorithm will break of the searching loop if the rectangles fit but "it may be possible to fit them in a bin smaller by 128"  
+discard_step = 128 means that the algorithm will break of the searching loop if the rectangles fit but "it may be possible to fit them in a bin smaller by 128"
 the bigger the value, the sooner the algorithm will finish but the rectangles will be packed less tightly.
 use discard_step = 1 for maximum tightness.
 
@@ -76,8 +76,8 @@ struct node {
 	pnode c[2];
 	rect_ltrb rc;
 	bool id = false;
-	node(rect_ltrb rc = rect_ltrb()) :
-			rc(rc) {}
+	node(rect_ltrb rect_rc = rect_ltrb()) :
+			rc(rect_rc) {}
 
 	void reset(const rect_wh &r) {
 		id = false;
@@ -272,15 +272,15 @@ rect_wh::rect_wh(const rect_ltrb &rr) :
 rect_wh::rect_wh(const rect_xywh &rr) :
 		w(rr.w),
 		h(rr.h) {}
-rect_wh::rect_wh(int w, int h) :
-		w(w),
-		h(h) {}
+rect_wh::rect_wh(int p_w, int p_h) :
+		w(p_w),
+		h(p_h) {}
 
-int rect_wh::fits(const rect_wh &r, bool allowFlip) const {
-	if (w == r.w && h == r.h) return 3;
-	if (allowFlip && h == r.w && w == r.h) return 4;
-	if (w <= r.w && h <= r.h) return 1;
-	if (allowFlip && h <= r.w && w <= r.h) return 2;
+int rect_wh::fits(const rect_wh &p_r, bool p_allow_flip) const {
+	if (w == p_r.w && h == p_r.h) return 3;
+	if (p_allow_flip && h == p_r.w && w == p_r.h) return 4;
+	if (w <= p_r.w && h <= p_r.h) return 1;
+	if (p_allow_flip && h <= p_r.w && w <= p_r.h) return 2;
 	return 0;
 }
 
@@ -289,11 +289,11 @@ rect_ltrb::rect_ltrb() :
 		t(0),
 		r(0),
 		b(0) {}
-rect_ltrb::rect_ltrb(int l, int t, int r, int b) :
-		l(l),
-		t(t),
-		r(r),
-		b(b) {}
+rect_ltrb::rect_ltrb(int p_l, int p_t, int p_r, int p_b) :
+		l(p_l),
+		t(p_t),
+		r(p_r),
+		b(p_b) {}
 
 int rect_ltrb::w() const {
 	return r - l;
@@ -322,16 +322,16 @@ void rect_ltrb::h(int hh) {
 rect_xywh::rect_xywh() :
 		x(0),
 		y(0) {}
-rect_xywh::rect_xywh(const rect_ltrb &rc) :
-		x(rc.l),
-		y(rc.t) {
-	b(rc.b);
-	r(rc.r);
+rect_xywh::rect_xywh(const rect_ltrb &p_rc) :
+		x(p_rc.l),
+		y(p_rc.t) {
+	b(p_rc.b);
+	r(p_rc.r);
 }
-rect_xywh::rect_xywh(int x, int y, int w, int h) :
-		rect_wh(w, h),
-		x(x),
-		y(y) {}
+rect_xywh::rect_xywh(int p_x, int p_y, int p_w, int p_h) :
+		rect_wh(p_w, p_h),
+		x(p_x),
+		y(p_y) {}
 
 rect_xywh::operator rect_ltrb() {
 	rect_ltrb rr(x, y, 0, 0);
@@ -348,12 +348,12 @@ int rect_xywh::b() const {
 	return y + h;
 }
 
-void rect_xywh::r(int right) {
-	w = right - x;
+void rect_xywh::r(int p_right) {
+	w = p_right - x;
 }
 
-void rect_xywh::b(int bottom) {
-	h = bottom - y;
+void rect_xywh::b(int p_bottom) {
+	h = p_bottom - y;
 }
 
 int rect_wh::area() {
@@ -364,11 +364,11 @@ int rect_wh::perimeter() {
 	return 2 * w + 2 * h;
 }
 
-rect_xywhf::rect_xywhf(const rect_ltrb &rr) :
-		rect_xywh(rr),
+rect_xywhf::rect_xywhf(const rect_ltrb &p_rr) :
+		rect_xywh(p_rr),
 		flipped(false) {}
-rect_xywhf::rect_xywhf(int x, int y, int width, int height) :
-		rect_xywh(x, y, width, height),
+rect_xywhf::rect_xywhf(int p_x, int p_y, int p_width, int p_height) :
+		rect_xywh(p_x, p_y, p_width, p_height),
 		flipped(false) {}
 rect_xywhf::rect_xywhf() :
 		flipped(false) {}

@@ -1,100 +1,117 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="TexturePacker" inherits="Reference" version="3.5">
+<class name="TexturePacker" inherits="RefCounted" version="4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
 	<brief_description>
-		A class, that can merge textures.
+		A packer utility that can merge textures.
 	</brief_description>
 	<description>
+		TexturePacker is a utility class that allows you to merge multiple textures into a single texture atlas.
 	</description>
 	<tutorials>
 	</tutorials>
 	<methods>
 		<method name="add_texture">
 			<return type="AtlasTexture" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture2D" />
 			<description>
+				Adds a texture to the packer and returns an [AtlasTexture] representing the added texture.
 			</description>
 		</method>
 		<method name="clear">
 			<return type="void" />
 			<description>
+				Clears all textures from the packer.
 			</description>
 		</method>
 		<method name="get_generated_texture">
 			<return type="ImageTexture" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the generated ImageTexture at the given index.
 			</description>
 		</method>
 		<method name="get_generated_texture_count">
 			<return type="int" />
 			<description>
+				Returns the number of generated textures in the packer.
 			</description>
 		</method>
 		<method name="get_original_texture">
-			<return type="Texture" />
-			<argument index="0" name="index" type="int" />
+			<return type="Texture2D" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns the original [Texture2D] at the given index.
 			</description>
 		</method>
 		<method name="get_texture">
 			<return type="AtlasTexture" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture2D" />
 			<description>
+				Returns an [AtlasTexture] representing the given Texture2D.
 			</description>
 		</method>
 		<method name="get_texture_count">
 			<return type="int" />
 			<description>
+				Returns the number of textures added to the packer.
 			</description>
 		</method>
 		<method name="get_texture_index">
 			<return type="AtlasTexture" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Returns an [AtlasTexture] representing the texture at the given index.
 			</description>
 		</method>
 		<method name="merge">
 			<return type="void" />
 			<description>
+				Merges all added textures into a single texture atlas.
 			</description>
 		</method>
 		<method name="remove_texture">
 			<return type="void" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture2D" />
 			<description>
+				Removes the specified texture from the packer.
 			</description>
 		</method>
 		<method name="remove_texture_index">
 			<return type="void" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Removes the texture at the specified index from the packer.
 			</description>
 		</method>
 		<method name="unref_texture">
 			<return type="bool" />
-			<argument index="0" name="texture" type="Texture" />
+			<param index="0" name="texture" type="Texture2D" />
 			<description>
+				Unreferences the specified texture and returns true if successful, false otherwise.
 			</description>
 		</method>
 		<method name="unref_texture_index">
 			<return type="bool" />
-			<argument index="0" name="index" type="int" />
+			<param index="0" name="index" type="int" />
 			<description>
+				Unreferences the texture at the specified index and returns true if successful, false otherwise.
 			</description>
 		</method>
 	</methods>
 	<members>
-		<member name="background_color" type="Color" setter="set_background_color" getter="get_background_color" default="Color( 0, 0, 0, 1 )">
+		<member name="background_color" type="Color" setter="set_background_color" getter="get_background_color" default="Color(0, 0, 0, 1)">
+			The background color of the texture atlas.
 		</member>
 		<member name="keep_original_atlases" type="bool" setter="set_keep_original_atlases" getter="get_keep_original_atlases" default="false">
+			If true, the original atlases will be kept in memory after merging.
 		</member>
 		<member name="margin" type="int" setter="set_margin" getter="get_margin" default="0">
+			The margin between textures in the atlas.
 		</member>
 		<member name="max_atlas_size" type="int" setter="set_max_atlas_size" getter="get_max_atlas_size" default="1024">
+			The maximum size of the texture atlas.
 		</member>
-		<member name="texture_flags" type="int" setter="set_texture_flags" getter="get_texture_flags" default="5">
+		<member name="texture_flags" type="int" setter="set_texture_flags" getter="get_texture_flags" default="0">
+			Texture flags applied to the generated atlas.
 		</member>
 	</members>
-	<constants>
-	</constants>
 </class>
